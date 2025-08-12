@@ -1,1419 +1,557 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<!doctype html>
+<html lang=ar dir=rtl>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔥 معركة الفرق الاحترافية 🔥</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap');
-        
-        * {
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Cairo', sans-serif;
-            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #533483 100%);
-            background-attachment: fixed;
-            overflow-x: hidden;
-        }
-        
-        .military-bg {
-            background-image: 
-                radial-gradient(circle at 25% 25%, rgba(255,0,0,0.1) 0%, transparent 50%),
-                radial-gradient(circle at 75% 75%, rgba(0,255,0,0.1) 0%, transparent 50%),
-                linear-gradient(45deg, rgba(0,0,0,0.8) 0%, rgba(20,20,40,0.9) 100%);
-            position: relative;
-        }
-        
-        .team-card {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background: linear-gradient(145deg, rgba(30,30,30,0.9) 0%, rgba(60,60,60,0.8) 100%);
-            border: 2px solid transparent;
-            backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .team-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 
-                0 25px 50px rgba(0,0,0,0.5),
-                0 0 30px rgba(255,255,255,0.1),
-                inset 0 1px 0 rgba(255,255,255,0.2);
-            border-color: rgba(255,255,255,0.3);
-        }
-        
-        .team-red { border-left: 5px solid #ff4444; }
-        .team-blue { border-left: 5px solid #4444ff; }
-        .team-green { border-left: 5px solid #44ff44; }
-        .team-yellow { border-left: 5px solid #ffff44; }
-        
-        .weapon-card {
-            transition: all 0.3s ease;
-            background: linear-gradient(145deg, rgba(40,40,40,0.95) 0%, rgba(20,20,20,0.95) 100%);
-            border: 2px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(15px);
-        }
-        
-        .weapon-card:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            border-color: rgba(255,255,255,0.3);
-        }
-        
-        .health-bar {
-            background: linear-gradient(90deg, #ff4444 0%, #ffaa44 50%, #44ff44 100%);
-            height: 8px;
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(145deg, #2563eb 0%, #1d4ed8 100%);
-            border: 2px solid #3b82f6;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary:hover {
-            background: linear-gradient(145deg, #3b82f6 0%, #2563eb 100%);
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
-            transform: translateY(-2px);
-        }
-        
-        .btn-danger {
-            background: linear-gradient(145deg, #dc2626 0%, #991b1b 100%);
-            border: 2px solid #ef4444;
-        }
-        
-        .btn-danger:hover {
-            background: linear-gradient(145deg, #ef4444 0%, #dc2626 100%);
-            box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
-            transform: translateY(-2px);
-        }
-        
-        .btn-success {
-            background: linear-gradient(145deg, #059669 0%, #047857 100%);
-            border: 2px solid #10b981;
-        }
-        
-        .btn-success:hover {
-            background: linear-gradient(145deg, #10b981 0%, #059669 100%);
-            box-shadow: 0 0 20px rgba(16, 185, 129, 0.4);
-            transform: translateY(-2px);
-        }
-        
-        .attack-animation {
-            animation: attackPulse 0.8s ease-in-out;
-        }
-        
-        @keyframes attackPulse {
-            0% { transform: scale(1); filter: brightness(1); }
-            50% { transform: scale(1.1); filter: brightness(2); box-shadow: 0 0 30px #ff4444; }
-            100% { transform: scale(1); filter: brightness(1); }
-        }
-        
-        .damage-text {
-            animation: damageFloat 1.5s ease-out forwards;
-            font-weight: 900;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-        }
-        
-        @keyframes damageFloat {
-            0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-60px) scale(0.8); }
-        }
-        
-        .victory-animation {
-            animation: victoryBounce 1.5s ease-in-out infinite;
-        }
-        
-        @keyframes victoryBounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-30px); }
-        }
-        
-        .modal {
-            background: rgba(0,0,0,0.9);
-            backdrop-filter: blur(10px);
-        }
-        
-        .modal-content {
-            background: linear-gradient(145deg, #1f2937 0%, #111827 100%);
-            border: 2px solid #3b82f6;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
-        }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            max-width: 400px;
-            padding: 16px 20px;
-            border-radius: 12px;
-            font-weight: 600;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-        }
-        
-        .notification.show {
-            transform: translateX(0);
-        }
-        
-        .notification-success {
-            background: linear-gradient(135deg, #10b981, #059669);
-            border: 2px solid #34d399;
-            color: white;
-        }
-        
-        .notification-error {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            border: 2px solid #f87171;
-            color: white;
-        }
-        
-        .notification-info {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            border: 2px solid #60a5fa;
-            color: white;
-        }
-    </style>
+<meta charset=UTF-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>نظام البطاقات التعليمية المتقدم - Gemini AI</title>
+<script src=https://cdn.tailwindcss.com></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel=stylesheet>
+<style>*{font-family:Cairo,sans-serif}.flashcard{perspective:1000px;width:100%;height:300px;position:relative}.flashcard-inner{position:relative;width:100%;height:100%;text-align:center;transition:transform .6s ease-in-out;transform-style:preserve-3d;cursor:pointer}.flashcard.flipped .flashcard-inner{transform:rotateY(180deg)}.flashcard-back,.flashcard-front{position:absolute;width:100%;height:100%;backface-visibility:hidden;border-radius:20px;display:flex;flex-direction:column;justify-content:space-between;padding:24px;box-shadow:0 10px 30px rgba(0,0,0,.1);border:2px solid rgba(255,255,255,.2);overflow:hidden}.flashcard-back{transform:rotateY(180deg)}.flashcard-content{flex:1;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px 0}.flashcard-text{font-size:18px;font-weight:600;line-height:1.5;color:#fff;text-shadow:0 2px 4px rgba(0,0,0,.3)}.rating-section{position:absolute;bottom:20px;left:50%;transform:translateX(-50%);display:flex;gap:10px;opacity:0;transition:opacity .3s ease;z-index:10}.flashcard.flipped .rating-section{opacity:1}.rating-btn{padding:8px 16px;border-radius:20px;font-size:12px;font-weight:700;border:none;cursor:pointer;transition:all .2s ease;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.2)}.rating-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,.3)}.rating-btn:active{transform:translateY(0)}.rating-hard{background:linear-gradient(135deg,#ef4444,#dc2626)}.rating-good{background:linear-gradient(135deg,#f59e0b,#d97706)}.rating-easy{background:linear-gradient(135deg,#10b981,#059669)}@keyframes slideIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}.slide-in{animation:slideIn .5s ease-out}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}.pulse{animation:pulse 2s infinite}@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}.shake{animation:shake .5s ease-in-out}.spinner{border:3px solid #f3f3f3;border-top:3px solid #3b82f6;border-radius:50%;width:24px;height:24px;animation:spin 1s linear infinite;display:inline-block}@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:#f1f5f9;border-radius:4px}::-webkit-scrollbar-thumb{background:linear-gradient(135deg,#3b82f6,#1d4ed8);border-radius:4px}::-webkit-scrollbar-thumb:hover{background:linear-gradient(135deg,#1d4ed8,#1e40af)}@media print{body *{visibility:hidden}.print-area,.print-area *{visibility:visible}.print-area{position:absolute;left:0;top:0;width:100%}.no-print{display:none!important}}@media (max-width:768px){.flashcard{height:280px}.flashcard-text{font-size:16px}.rating-btn{padding:6px 12px;font-size:11px}}.stage-new{background:linear-gradient(135deg,#ef4444,#dc2626)}.stage-learning{background:linear-gradient(135deg,#f59e0b,#d97706)}.stage-review{background:linear-gradient(135deg,#3b82f6,#1d4ed8)}.stage-mastered{background:linear-gradient(135deg,#10b981,#059669)}.notification{position:fixed;top:20px;right:20px;padding:16px 20px;border-radius:12px;color:#fff;font-weight:600;box-shadow:0 10px 25px rgba(0,0,0,.2);z-index:1000;max-width:400px;animation:slideIn .3s ease-out}.notification-success{background:linear-gradient(135deg,#10b981,#059669)}.notification-error{background:linear-gradient(135deg,#ef4444,#dc2626)}.notification-info{background:linear-gradient(135deg,#3b82f6,#1d4ed8)}</style>
 </head>
-<body class="military-bg min-h-screen text-white">
-    <!-- نافذة المطور -->
-    <div id="developerModal" class="modal fixed inset-0 flex items-center justify-center z-50">
-        <div class="modal-content rounded-3xl p-8 max-w-md mx-4 text-center">
-            <div class="text-6xl mb-6">👨‍💻</div>
-            <h2 class="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-                مطور اللعبة
-            </h2>
-            <h3 class="text-2xl font-bold mb-6 text-white">
-                أ. عبد الرحمن نصر الله
-            </h3>
-            <p class="text-gray-300 mb-6 leading-relaxed">
-                مرحباً بك في لعبة معركة الفرق الاحترافية! 
-                تم تطوير هذه اللعبة بعناية فائقة لتقديم أفضل تجربة قتالية.
-            </p>
-            <div class="space-y-4">
-                <a href="https://www.instagram.com/nasrallah_2002/" target="_blank" 
-                   class="block w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white px-6 py-4 rounded-xl font-bold text-lg transition-all hover:scale-105">
-                    <i class="fab fa-instagram mr-2"></i>
-                    تابعني على الانستقرام
-                </a>
-                <button onclick="Game.closeDeveloperModal()" 
-                        class="w-full btn-success text-white px-6 py-4 rounded-xl font-bold text-lg transition-all hover:scale-105">
-                    <i class="fas fa-play mr-2"></i>
-                    ابدأ اللعبة
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- الشاشة الرئيسية -->
-    <div id="homeScreen" class="container mx-auto px-4 py-8">
-        <div class="text-center mb-16">
-            <h1 class="text-7xl font-black mb-6 bg-gradient-to-r from-red-500 via-yellow-500 to-orange-600 bg-clip-text text-transparent drop-shadow-2xl">
-                <i class="fas fa-skull-crossbones mr-4"></i>
-                معركة الفرق الاحترافية
-                <i class="fas fa-fire ml-4"></i>
-            </h1>
-            <p class="text-2xl text-gray-300 mb-4 font-semibold">
-                <i class="fas fa-shield-alt mr-2"></i>
-                تنافس، اشتري الأسلحة، واهزم خصومك في ساحة المعركة!
-                <i class="fas fa-sword ml-2"></i>
-            </p>
-        </div>
-
-        <!-- بطاقات الفرق -->
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8 mb-12" id="teamsContainer">
-            <!-- سيتم إنشاء بطاقات الفرق هنا -->
-        </div>
-
-        <!-- لوحة التحكم -->
-        <div class="bg-gradient-to-br from-gray-900/90 to-black/80 rounded-3xl p-8 mb-8 border border-gray-600/50">
-            <h3 class="text-4xl font-bold mb-8 text-center">
-                <i class="fas fa-cog text-yellow-500 mr-3"></i>
-                لوحة التحكم الاحترافية
-                <i class="fas fa-crown text-yellow-500 ml-3"></i>
-            </h3>
-            
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- إدارة النقاط -->
-                <div class="bg-gradient-to-br from-blue-900/50 to-purple-900/50 rounded-2xl p-6 border border-blue-500/30">
-                    <h4 class="text-2xl font-bold mb-6 text-blue-300">
-                        <i class="fas fa-coins mr-2"></i>
-                        إدارة النقاط
-                    </h4>
-                    
-                    <select id="teamSelect" class="w-full p-4 rounded-xl bg-black/50 text-white border-2 border-gray-600 focus:border-blue-500 mb-4 text-lg font-semibold">
-                        <!-- سيتم ملؤها بواسطة JavaScript -->
-                    </select>
-                    
-                    <input type="number" id="pointsInput" placeholder="أدخل عدد النقاط..." 
-                           class="w-full p-4 rounded-xl bg-black/50 text-white border-2 border-gray-600 focus:border-yellow-500 placeholder-gray-400 mb-6 text-lg font-semibold">
-                    
-                    <div class="grid grid-cols-2 gap-4 mb-4">
-                        <button onclick="Game.addPoints()" class="btn-success text-white px-6 py-4 rounded-xl font-bold text-lg">
-                            <i class="fas fa-plus-circle mr-2"></i>
-                            إضافة نقاط
-                        </button>
-                        <button onclick="Game.removePoints()" class="btn-danger text-white px-6 py-4 rounded-xl font-bold text-lg">
-                            <i class="fas fa-minus-circle mr-2"></i>
-                            خصم نقاط
-                        </button>
-                    </div>
-                    
-                    <!-- أزرار سريعة -->
-                    <div class="grid grid-cols-4 gap-2">
-                        <button onclick="Game.quickAddPoints(10)" class="bg-green-600/80 hover:bg-green-500 px-3 py-2 rounded-lg text-sm font-bold">+10</button>
-                        <button onclick="Game.quickAddPoints(25)" class="bg-green-600/80 hover:bg-green-500 px-3 py-2 rounded-lg text-sm font-bold">+25</button>
-                        <button onclick="Game.quickAddPoints(50)" class="bg-green-600/80 hover:bg-green-500 px-3 py-2 rounded-lg text-sm font-bold">+50</button>
-                        <button onclick="Game.quickAddPoints(100)" class="bg-green-600/80 hover:bg-green-500 px-3 py-2 rounded-lg text-sm font-bold">+100</button>
-                    </div>
-                </div>
-                
-                <!-- التحكم في اللعبة -->
-                <div class="bg-gradient-to-br from-red-900/50 to-orange-900/50 rounded-2xl p-6 border border-red-500/30">
-                    <h4 class="text-2xl font-bold mb-6 text-red-300">
-                        <i class="fas fa-gamepad mr-2"></i>
-                        التحكم في اللعبة
-                    </h4>
-                    
-                    <div class="space-y-4">
-                        <button onclick="Game.showShop()" class="w-full btn-primary text-white px-6 py-4 rounded-xl font-bold text-xl">
-                            <i class="fas fa-shopping-cart mr-3 text-yellow-400"></i>
-                            متجر الأسلحة
-                        </button>
-                        
-                        <button onclick="Game.showBattle()" class="w-full btn-danger text-white px-6 py-4 rounded-xl font-bold text-xl">
-                            <i class="fas fa-sword mr-3"></i>
-                            ساحة المعركة
-                        </button>
-                        
-                        <button onclick="Game.showChallenges()" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white px-6 py-4 rounded-xl font-bold text-xl transition-all hover:scale-105">
-                            <i class="fas fa-trophy mr-3"></i>
-                            التحديات والإنجازات
-                        </button>
-                        
-                        <button onclick="Game.resetGame()" class="w-full btn-primary text-white px-6 py-4 rounded-xl font-bold text-xl">
-                            <i class="fas fa-redo mr-3"></i>
-                            إعادة تشغيل
-                        </button>
-                    </div>
-                    
-                    <!-- إحصائيات -->
-                    <div class="mt-6 bg-black/30 rounded-xl p-4">
-                        <p class="text-sm text-gray-400 mb-3">إحصائيات اللعبة:</p>
-                        <div class="grid grid-cols-2 gap-4 text-sm">
-                            <div class="text-center">
-                                <div class="text-2xl font-bold text-green-400" id="totalWeapons">0</div>
-                                <div class="text-gray-400">أسلحة مشتراة</div>
-                            </div>
-                            <div class="text-center">
-                                <div class="text-2xl font-bold text-red-400" id="totalBattles">0</div>
-                                <div class="text-gray-400">معارك خاضت</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- شاشة المتجر -->
-    <div id="shopScreen" class="hidden container mx-auto px-4 py-8">
-        <div class="text-center mb-8">
-            <h2 class="text-5xl font-bold mb-4 bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
-                🛒 متجر الأسلحة الاحترافي 🛒
-            </h2>
-            <p class="text-xl text-gray-300">اختر فريقك واشتري أقوى الأسلحة!</p>
-        </div>
-
-        <div class="mb-8 text-center">
-            <select id="shopTeamSelect" class="p-4 rounded-xl bg-white/20 text-white text-xl font-bold border-2 border-yellow-500 mb-4">
-                <!-- سيتم ملؤها بواسطة JavaScript -->
-            </select>
-            <div class="text-2xl font-bold">💰 النقاط المتاحة: <span id="availablePoints" class="text-yellow-400">100</span></div>
-        </div>
-
-        <div id="weaponsGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-8">
-            <!-- سيتم ملء الأسلحة هنا -->
-        </div>
-
-        <div class="text-center">
-            <button onclick="Game.showBattle()" class="btn-danger px-8 py-4 rounded-xl font-bold text-xl mr-4">
-                ⚔️ بدء المعركة
-            </button>
-            <button onclick="Game.showHome()" class="btn-primary px-8 py-4 rounded-xl font-bold text-xl">
-                🏠 العودة للرئيسية
-            </button>
-        </div>
-    </div>
-
-    <!-- شاشة المعركة -->
-    <div id="battleScreen" class="hidden container mx-auto px-4 py-8">
-        <div class="text-center mb-8">
-            <h2 class="text-5xl font-bold mb-4 bg-gradient-to-r from-red-500 to-orange-600 bg-clip-text text-transparent">
-                ⚔️ ساحة المعركة ⚔️
-            </h2>
-            <p class="text-xl text-gray-300">اختر المهاجم والهدف وابدأ القتال!</p>
-        </div>
-
-        <div class="bg-gradient-to-br from-gray-900/90 to-black/80 rounded-3xl p-8 mb-8 border-2 border-red-500">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-                <!-- المهاجم -->
-                <div class="bg-gradient-to-br from-red-900/80 to-red-700/60 rounded-2xl p-6 border-2 border-red-500">
-                    <h3 class="text-3xl font-bold mb-4 text-red-300">
-                        <i class="fas fa-sword mr-2"></i>
-                        المهاجم
-                    </h3>
-                    <select id="attackerSelect" class="w-full p-4 rounded-xl bg-black/50 text-white mb-4 text-lg font-bold border-2 border-red-500">
-                        <!-- سيتم ملؤها بواسطة JavaScript -->
-                    </select>
-                    <div id="attackerWeapons" class="mb-4">
-                        <!-- سيتم عرض أسلحة المهاجم هنا -->
-                    </div>
-                </div>
-
-                <!-- الهدف -->
-                <div class="bg-gradient-to-br from-blue-900/80 to-blue-700/60 rounded-2xl p-6 border-2 border-blue-500">
-                    <h3 class="text-3xl font-bold mb-4 text-blue-300">
-                        <i class="fas fa-crosshairs mr-2"></i>
-                        الهدف
-                    </h3>
-                    <select id="targetSelect" class="w-full p-4 rounded-xl bg-black/50 text-white mb-4 text-lg font-bold border-2 border-blue-500">
-                        <!-- سيتم ملؤها بواسطة JavaScript -->
-                    </select>
-                    <div class="text-center">
-                        <div class="text-6xl mb-4">🎯</div>
-                        <p class="text-gray-300">اختر الهدف بعناية!</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-center mb-8">
-                <button onclick="Game.attack()" class="btn-danger text-white px-12 py-6 rounded-2xl font-black text-3xl">
-                    <i class="fas fa-bomb mr-3"></i>
-                    🔥 هجوم مدمر! 🔥
-                </button>
-            </div>
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            <!-- سجل المعركة -->
-            <div class="bg-gradient-to-br from-gray-900/90 to-black/80 rounded-2xl p-6 border-2 border-gray-600">
-                <h3 class="text-2xl font-bold mb-4 text-yellow-400">
-                    <i class="fas fa-scroll mr-2"></i>
-                    سجل المعركة
-                </h3>
-                <div id="battleLog" class="max-h-96 overflow-y-auto">
-                    <!-- سيتم إضافة سجل المعركة هنا -->
-                </div>
-            </div>
-
-            <!-- إحصائيات المعركة -->
-            <div class="bg-gradient-to-br from-purple-900/80 to-indigo-900/60 rounded-2xl p-6 border-2 border-purple-500">
-                <h3 class="text-2xl font-bold mb-4 text-purple-300">
-                    <i class="fas fa-chart-bar mr-2"></i>
-                    إحصائيات المعركة
-                </h3>
-                <div class="space-y-3">
-                    <div class="flex justify-between">
-                        <span>إجمالي الهجمات:</span>
-                        <span id="totalAttacks" class="font-bold text-yellow-400">0</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>أقوى ضربة:</span>
-                        <span id="strongestHit" class="font-bold text-red-400">0</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="text-center">
-            <button onclick="Game.showHome()" class="btn-primary px-8 py-4 rounded-xl font-bold text-xl">
-                🏠 العودة للرئيسية
-            </button>
-        </div>
-    </div>
-
-    <!-- شاشة التحديات -->
-    <div id="challengesScreen" class="hidden container mx-auto px-4 py-8">
-        <div class="text-center mb-8">
-            <h2 class="text-5xl font-bold mb-4 bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">
-                🏆 التحديات والإنجازات 🏆
-            </h2>
-            <p class="text-xl text-gray-300">أكمل التحديات واحصل على مكافآت رائعة!</p>
-        </div>
-
-        <!-- إحصائيات اللاعب -->
-        <div class="bg-gradient-to-br from-gray-900/90 to-black/80 rounded-3xl p-8 mb-8 border border-gray-600/50">
-            <h3 class="text-3xl font-bold mb-6 text-center text-yellow-400">
-                <i class="fas fa-chart-line mr-3"></i>
-                إحصائياتك الشخصية
-            </h3>
-            
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div class="bg-gradient-to-br from-red-900/50 to-red-700/30 rounded-2xl p-4 text-center border border-red-500/30">
-                    <div class="text-3xl mb-2">💥</div>
-                    <div class="text-2xl font-bold text-red-400" id="totalDamageDisplay">0</div>
-                    <div class="text-sm text-gray-400">إجمالي الضرر</div>
-                </div>
-                
-                <div class="bg-gradient-to-br from-green-900/50 to-green-700/30 rounded-2xl p-4 text-center border border-green-500/30">
-                    <div class="text-3xl mb-2">❤️</div>
-                    <div class="text-2xl font-bold text-green-400" id="totalHealingDisplay">0</div>
-                    <div class="text-sm text-gray-400">إجمالي الشفاء</div>
-                </div>
-                
-                <div class="bg-gradient-to-br from-blue-900/50 to-blue-700/30 rounded-2xl p-4 text-center border border-blue-500/30">
-                    <div class="text-3xl mb-2">⚔️</div>
-                    <div class="text-2xl font-bold text-blue-400" id="weaponsPurchasedDisplay">0</div>
-                    <div class="text-sm text-gray-400">أسلحة مشتراة</div>
-                </div>
-                
-                <div class="bg-gradient-to-br from-purple-900/50 to-purple-700/30 rounded-2xl p-4 text-center border border-purple-500/30">
-                    <div class="text-3xl mb-2">💻</div>
-                    <div class="text-2xl font-bold text-purple-400" id="weaponsStolenDisplay">0</div>
-                    <div class="text-sm text-gray-400">أسلحة مسروقة</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- قائمة التحديات -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8" id="challengesList">
-            <!-- سيتم ملء التحديات هنا -->
-        </div>
-
-        <!-- الإنجازات المكتملة -->
-        <div class="bg-gradient-to-br from-yellow-900/50 to-orange-900/30 rounded-3xl p-8 mb-8 border border-yellow-500/30">
-            <h3 class="text-3xl font-bold mb-6 text-center text-yellow-400">
-                <i class="fas fa-medal mr-3"></i>
-                الإنجازات المكتملة
-            </h3>
-            <div id="achievementsList" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                <!-- سيتم عرض الإنجازات هنا -->
-            </div>
-        </div>
-
-        <div class="text-center">
-            <button onclick="Game.showHome()" class="btn-primary px-8 py-4 rounded-xl font-bold text-xl">
-                🏠 العودة للرئيسية
-            </button>
-        </div>
-    </div>
-
-    <!-- شاشة النصر -->
-    <div id="victoryScreen" class="hidden container mx-auto px-4 py-8 text-center">
-        <div class="victory-animation">
-            <h2 class="text-6xl font-bold mb-8 bg-gradient-to-r from-yellow-400 to-red-500 bg-clip-text text-transparent">
-                🏆 النصر المجيد! 🏆
-            </h2>
-        </div>
-        <div id="winnerInfo" class="text-3xl mb-8">
-            <!-- سيتم عرض معلومات الفائز هنا -->
-        </div>
-        <button onclick="Game.resetGame()" class="btn-success px-8 py-4 rounded-xl font-bold text-xl">
-            🔄 لعبة جديدة
-        </button>
-    </div>
-
-    <script>
-        // كلاس اللعبة الرئيسي
-        class TeamBattleGame {
-            constructor() {
-                this.teams = [
-                    { name: 'فرقة الدم الأحمر', health: 100, points: 100, weapons: [], icon: '🔥', color: 'red' },
-                    { name: 'حراس العاصفة الزرقاء', health: 100, points: 100, weapons: [], icon: '🛡️', color: 'blue' },
-                    { name: 'كتيبة الرعد الأخضر', health: 100, points: 100, weapons: [], icon: '💣', color: 'green' },
-                    { name: 'قوات الصاعقة الذهبية', health: 100, points: 100, weapons: [], icon: '🚀', color: 'yellow' }
-                ];
-                
-                this.weapons = {
-                    // الأسلحة الأساسية
-                    pistol: { name: 'مسدس جلوك 19', icon: '🔫', damage: [15, 25], cost: 40, description: 'سلاح جانبي موثوق', category: 'basic', rarity: 'common' },
-                    rifle: { name: 'بندقية AK-47', icon: '🔫', damage: [25, 35], cost: 70, description: 'بندقية هجومية مدمرة', category: 'basic', rarity: 'common' },
-                    shotgun: { name: 'بندقية M4 Super 90', icon: '🔫', damage: [35, 50], cost: 90, description: 'بندقية قريبة المدى مدمرة', category: 'basic', rarity: 'uncommon' },
-                    
-                    // أسلحة القناصة
-                    sniper: { name: 'بندقية Barrett M82', icon: '🎯', damage: [45, 60], cost: 120, description: 'بندقية قناص دقيقة', category: 'sniper', rarity: 'rare' },
-                    awp: { name: 'AWP Dragon Lore', icon: '🎯', damage: [60, 80], cost: 200, description: 'أسطورة القناصة', category: 'sniper', rarity: 'legendary' },
-                    
-                    // المتفجرات
-                    grenade: { name: 'قنبلة M67 اليدوية', icon: '💣', damage: [30, 45], cost: 60, description: 'قنبلة تشظي مدمرة', category: 'explosive', rarity: 'common' },
-                    c4: { name: 'متفجرات C4', icon: '💣', damage: [50, 70], cost: 150, description: 'متفجرات عسكرية قوية', category: 'explosive', rarity: 'rare' },
-                    claymore: { name: 'لغم كلايمور', icon: '💣', damage: [40, 60], cost: 110, description: 'لغم مضاد للأفراد', category: 'explosive', rarity: 'uncommon' },
-                    
-                    // الصواريخ والأسلحة الثقيلة
-                    missile: { name: 'صاروخ جافلين', icon: '🚀', damage: [55, 75], cost: 180, description: 'صاروخ موجه مضاد للدبابات', category: 'heavy', rarity: 'rare' },
-                    rpg: { name: 'قاذف RPG-7', icon: '🚀', damage: [65, 85], cost: 220, description: 'قاذف صواريخ محمول', category: 'heavy', rarity: 'epic' },
-                    tank: { name: 'دبابة M1 Abrams', icon: '🚀', damage: [80, 100], cost: 400, description: 'دبابة قتال رئيسية', category: 'heavy', rarity: 'legendary' },
-                    
-                    // الأسلحة المستقبلية
-                    laser: { name: 'شعاع ليزر البلازما', icon: '⚡', damage: [30, 45], cost: 110, description: 'شعاع طاقة متقدم', category: 'futuristic', rarity: 'rare' },
-                    plasma: { name: 'مدفع البلازما', icon: '🔥', damage: [40, 55], cost: 140, description: 'يطلق كرات بلازما محرقة', category: 'futuristic', rarity: 'epic' },
-                    railgun: { name: 'مدفع السكة الحديدية', icon: '⚡', damage: [70, 90], cost: 300, description: 'سلاح كهرومغناطيسي فتاك', category: 'futuristic', rarity: 'legendary' },
-                    nuke: { name: 'رأس نووي تكتيكي', icon: '☢️', damage: [90, 120], cost: 500, description: 'سلاح الدمار الشامل', category: 'futuristic', rarity: 'mythic' },
-                    
-                    // الدروع والحماية
-                    shield: { name: 'درع الكيفلار', icon: '🛡️', defense: 0.3, cost: 80, description: 'يقلل الضرر 30%', category: 'defense', rarity: 'common' },
-                    armor: { name: 'درع التيتانيوم', icon: '🦾', defense: 0.5, cost: 120, description: 'حماية متقدمة 50%', category: 'defense', rarity: 'rare' },
-                    exosuit: { name: 'بدلة القتال الآلية', icon: '🤖', defense: 0.7, cost: 250, description: 'بدلة مدرعة متطورة 70%', category: 'defense', rarity: 'epic' },
-                    
-                    // العلاج والدعم
-                    medkit: { name: 'حقيبة الإسعاف', icon: '🏥', heal: 40, cost: 70, description: 'علاج متقدم +40 صحة', category: 'support', rarity: 'common' },
-                    adrenaline: { name: 'حقنة الأدرينالين', icon: '💉', heal: 30, boost: true, cost: 90, description: 'يستعيد الصحة ويعزز القوة', category: 'support', rarity: 'uncommon' },
-                    nanobots: { name: 'روبوتات النانو الطبية', icon: '🔬', heal: 60, cost: 150, description: 'تقنية علاج متقدمة', category: 'support', rarity: 'rare' },
-                    
-                    // أدوات خاصة
-                    emp: { name: 'قنبلة EMP', icon: '⚡', special: 'disable', cost: 130, description: 'تعطل الأسلحة الإلكترونية', category: 'special', rarity: 'rare' },
-                    smoke: { name: 'قنبلة دخان', icon: '💨', special: 'stealth', cost: 50, description: 'تخفي الفريق لهجمة واحدة', category: 'special', rarity: 'common' },
-                    flashbang: { name: 'قنبلة وميض', icon: '💥', special: 'stun', cost: 60, description: 'تشل العدو لدورة واحدة', category: 'special', rarity: 'uncommon' },
-                    drone: { name: 'طائرة استطلاع', icon: '🛸', special: 'scout', cost: 100, description: 'تكشف أسلحة العدو', category: 'special', rarity: 'uncommon' },
-                    hacker: { name: 'جهاز القرصنة', icon: '💻', special: 'hack', cost: 180, description: 'يسرق سلاح من العدو', category: 'special', rarity: 'epic' },
-                    
-                    // أسلحة أسطورية
-                    excalibur: { name: 'سيف إكسكاليبر', icon: '⚔️', damage: [100, 150], cost: 600, description: 'سيف الملوك الأسطوري', category: 'legendary', rarity: 'mythic' },
-                    mjolnir: { name: 'مطرقة ثور', icon: '🔨', damage: [120, 180], cost: 800, description: 'مطرقة الإله الاسكندنافي', category: 'legendary', rarity: 'mythic' },
-                    deathstar: { name: 'نجمة الموت', icon: '🌟', damage: [200, 300], cost: 1000, description: 'سلاح تدمير الكواكب', category: 'legendary', rarity: 'mythic' }
-                };
-                
-                this.selectedWeapon = null;
-                this.totalWeaponsPurchased = 0;
-                this.totalBattlesFought = 0;
-                this.totalAttacks = 0;
-                this.strongestHit = 0;
-                this.specialEffects = {};
-                this.achievements = [];
-                
-                // نظام التحديات
-                this.challenges = [
-                    { id: 'first_blood', name: 'الدم الأول', description: 'اهزم عدو للمرة الأولى', reward: 50, completed: false, icon: '🩸' },
-                    { id: 'weapon_master', name: 'سيد الأسلحة', description: 'اشتري 10 أسلحة مختلفة', reward: 100, completed: false, icon: '⚔️' },
-                    { id: 'survivor', name: 'الناجي', description: 'ابق على قيد الحياة مع 10 صحة أو أقل', reward: 75, completed: false, icon: '💀' },
-                    { id: 'destroyer', name: 'المدمر', description: 'اصنع ضرر 500 نقطة إجمالي', reward: 150, completed: false, icon: '💥' },
-                    { id: 'millionaire', name: 'المليونير', description: 'اجمع 1000 نقطة', reward: 200, completed: false, icon: '💰' },
-                    { id: 'legendary_hunter', name: 'صياد الأساطير', description: 'اشتري سلاح أسطوري', reward: 300, completed: false, icon: '🏆' },
-                    { id: 'perfect_shot', name: 'الرمية المثالية', description: 'اصنع ضرر 100+ في ضربة واحدة', reward: 120, completed: false, icon: '🎯' },
-                    { id: 'medic', name: 'الطبيب', description: 'استخدم 5 أدوات علاج', reward: 80, completed: false, icon: '🏥' },
-                    { id: 'tank', name: 'الدبابة', description: 'امتلك 3 دروع في نفس الوقت', reward: 100, completed: false, icon: '🛡️' },
-                    { id: 'hacker_master', name: 'سيد القرصنة', description: 'اسرق 3 أسلحة باستخدام جهاز القرصنة', reward: 180, completed: false, icon: '💻' }
-                ];
-                
-                this.totalDamageDealt = 0;
-                this.totalHealing = 0;
-                this.weaponsStolen = 0;
-                
-                this.init();
-            }
-            
-            init() {
-                this.createTeamCards();
-                this.updateSelectOptions();
-                this.updateDisplay();
-                this.setupEventListeners();
-            }
-            
-            createTeamCards() {
-                const container = document.getElementById('teamsContainer');
-                container.innerHTML = '';
-                
-                this.teams.forEach((team, index) => {
-                    const card = document.createElement('div');
-                    card.className = `team-card team-${team.color} rounded-2xl p-8 text-center text-white shadow-2xl`;
-                    card.setAttribute('data-team', index);
-                    
-                    card.innerHTML = `
-                        <div class="text-6xl mb-4">${team.icon}</div>
-                        <h3 class="text-2xl font-bold mb-4 text-${team.color}-400">
-                            <span class="team-display-name">${team.name}</span>
-                        </h3>
-                        
-                        <div class="mb-4">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-sm font-semibold">
-                                    <i class="fas fa-heart text-red-500 mr-1"></i>
-                                    الصحة
-                                </span>
-                                <span class="text-lg font-bold health">${team.health}</span>
-                            </div>
-                            <div class="health-bar">
-                                <div class="health-fill bg-gradient-to-r from-red-500 to-green-500 h-full transition-all duration-500" style="width: 100%"></div>
-                            </div>
-                        </div>
-                        
-                        <div class="text-xl mb-6 bg-black/30 rounded-lg p-3">
-                            <i class="fas fa-coins text-yellow-500 mr-2"></i>
-                            <span class="points">${team.points}</span> نقطة
-                        </div>
-                        
-                        <input type="text" placeholder="أدخل اسم الفريق..." 
-                               class="team-name-input w-full p-3 rounded-lg bg-black/30 text-white placeholder-gray-400 mb-4 text-center font-semibold border-2 border-gray-600 focus:border-${team.color}-500"
-                               onchange="Game.updateTeamName(${index}, this.value)">
-                        
-                        <div class="weapons-owned text-sm bg-black/20 rounded-lg p-3 min-h-[60px]">
-                            <div class="text-xs text-gray-400 mb-2">
-                                <i class="fas fa-shield-alt mr-1"></i>
-                                الأسلحة المملوكة
-                            </div>
-                            <div class="text-gray-500 text-xs">لا توجد أسلحة</div>
-                        </div>
-                    `;
-                    
-                    container.appendChild(card);
-                });
-            }
-            
-            updateSelectOptions() {
-                const selects = ['teamSelect', 'shopTeamSelect', 'attackerSelect', 'targetSelect'];
-                selects.forEach(selectId => {
-                    const select = document.getElementById(selectId);
-                    if (select) {
-                        const currentValue = select.value;
-                        select.innerHTML = '';
-                        this.teams.forEach((team, index) => {
-                            const option = document.createElement('option');
-                            option.value = index;
-                            option.textContent = `${team.icon} ${team.name}`;
-                            select.appendChild(option);
-                        });
-                        if (currentValue !== '') select.value = currentValue;
-                    }
-                });
-            }
-            
-            updateDisplay() {
-                this.teams.forEach((team, index) => {
-                    const teamCard = document.querySelector(`[data-team="${index}"]`);
-                    if (teamCard) {
-                        teamCard.querySelector('.health').textContent = team.health;
-                        teamCard.querySelector('.points').textContent = team.points;
-                        
-                        // تحديث شريط الصحة
-                        const healthFill = teamCard.querySelector('.health-fill');
-                        const healthPercentage = (team.health / 100) * 100;
-                        healthFill.style.width = healthPercentage + '%';
-                        
-                        // تحديث الأسلحة
-                        const weaponsDiv = teamCard.querySelector('.weapons-owned');
-                        let weaponsHTML = `
-                            <div class="text-xs text-gray-400 mb-2">
-                                <i class="fas fa-shield-alt mr-1"></i>
-                                الأسلحة المملوكة
-                            </div>
-                        `;
-                        
-                        if (team.weapons.length === 0) {
-                            weaponsHTML += '<div class="text-gray-500 text-xs">لا توجد أسلحة</div>';
-                        } else {
-                            weaponsHTML += team.weapons.map(weaponKey => {
-                                const weapon = this.weapons[weaponKey];
-                                return `<div class="inline-block bg-gradient-to-r from-gray-700 to-gray-600 rounded-lg px-2 py-1 m-1 text-xs border border-gray-500">
-                                    ${weapon.icon} ${weapon.name}
-                                </div>`;
-                            }).join('');
-                        }
-                        
-                        weaponsDiv.innerHTML = weaponsHTML;
-                    }
-                });
-                
-                // تحديث النقاط المتاحة في المتجر
-                const shopTeamSelect = document.getElementById('shopTeamSelect');
-                const availablePointsSpan = document.getElementById('availablePoints');
-                if (shopTeamSelect && availablePointsSpan) {
-                    const shopTeamIndex = shopTeamSelect.value || 0;
-                    availablePointsSpan.textContent = this.teams[shopTeamIndex].points;
-                }
-                
-                // تحديث الإحصائيات
-                document.getElementById('totalWeapons').textContent = this.totalWeaponsPurchased;
-                document.getElementById('totalBattles').textContent = this.totalBattlesFought;
-                document.getElementById('totalAttacks').textContent = this.totalAttacks;
-                document.getElementById('strongestHit').textContent = this.strongestHit;
-                
-                this.updateAttackerWeapons();
-            }
-            
-            updateAttackerWeapons() {
-                const attackerSelect = document.getElementById('attackerSelect');
-                const weaponsDiv = document.getElementById('attackerWeapons');
-                
-                if (!attackerSelect || !weaponsDiv) return;
-                
-                const attackerIndex = parseInt(attackerSelect.value) || 0;
-                const team = this.teams[attackerIndex];
-                
-                weaponsDiv.innerHTML = '<h4 class="font-bold mb-4 text-xl text-red-300">🔫 الأسلحة المتاحة:</h4>';
-                
-                if (team.weapons.length === 0) {
-                    weaponsDiv.innerHTML += '<p class="text-gray-400 text-lg">لا توجد أسلحة متاحة - اذهب للمتجر!</p>';
-                } else {
-                    team.weapons.forEach((weaponKey, index) => {
-                        const weapon = this.weapons[weaponKey];
-                        const isSelected = this.selectedWeapon === index;
-                        
-                        let damageInfo = '';
-                        if (weapon.damage) {
-                            damageInfo = `<span class="text-red-300 mr-2">(${weapon.damage[0]}-${weapon.damage[1]} ضرر)</span>`;
-                        } else if (weapon.heal) {
-                            damageInfo = `<span class="text-green-300 mr-2">(+${weapon.heal} شفاء)</span>`;
-                        } else if (weapon.defense) {
-                            damageInfo = `<span class="text-blue-300 mr-2">(${Math.round(weapon.defense * 100)}% حماية)</span>`;
-                        }
-                        
-                        weaponsDiv.innerHTML += `
-                            <button onclick="Game.selectWeapon(${index})" 
-                                    class="block w-full ${isSelected ? 'bg-yellow-600 border-yellow-400' : 'bg-white/20 border-gray-500'} hover:bg-yellow-500 rounded-xl p-4 mb-3 text-right border-2 transition-all font-bold text-lg">
-                                ${weapon.icon} ${weapon.name}
-                                ${damageInfo}
-                            </button>
-                        `;
-                    });
-                }
-            }
-            
-            setupEventListeners() {
-                const shopTeamSelect = document.getElementById('shopTeamSelect');
-                const attackerSelect = document.getElementById('attackerSelect');
-                
-                if (shopTeamSelect) {
-                    shopTeamSelect.addEventListener('change', () => this.updateDisplay());
-                }
-                
-                if (attackerSelect) {
-                    attackerSelect.addEventListener('change', () => {
-                        this.selectedWeapon = null;
-                        this.updateAttackerWeapons();
-                    });
-                }
-            }
-            
-            updateTeamName(teamIndex, newName) {
-                if (newName.trim()) {
-                    this.teams[teamIndex].name = newName.trim();
-                    document.querySelector(`[data-team="${teamIndex}"] .team-display-name`).textContent = newName.trim();
-                    this.updateSelectOptions();
-                    this.showNotification('تم تحديث اسم الفريق بنجاح! ✅', 'success');
-                }
-            }
-            
-            addPoints() {
-                const teamIndex = parseInt(document.getElementById('teamSelect').value) || 0;
-                const points = parseInt(document.getElementById('pointsInput').value) || 0;
-                
-                if (points > 0) {
-                    this.teams[teamIndex].points += points;
-                    this.updateDisplay();
-                    document.getElementById('pointsInput').value = '';
-                    this.showNotification(`تم إضافة ${points} نقطة للفريق ${this.teams[teamIndex].name}! 🎉`, 'success');
-                }
-            }
-            
-            removePoints() {
-                const teamIndex = parseInt(document.getElementById('teamSelect').value) || 0;
-                const points = parseInt(document.getElementById('pointsInput').value) || 0;
-                
-                if (points > 0) {
-                    this.teams[teamIndex].points = Math.max(0, this.teams[teamIndex].points - points);
-                    this.updateDisplay();
-                    document.getElementById('pointsInput').value = '';
-                    this.showNotification(`تم خصم ${points} نقطة من الفريق ${this.teams[teamIndex].name}! ⚠️`, 'info');
-                }
-            }
-            
-            quickAddPoints(amount) {
-                const teamIndex = parseInt(document.getElementById('teamSelect').value) || 0;
-                this.teams[teamIndex].points += amount;
-                this.updateDisplay();
-                this.showNotification(`تم إضافة ${amount} نقطة للفريق ${this.teams[teamIndex].name}! 🎉`, 'success');
-            }
-            
-            displayWeapons() {
-                const weaponsGrid = document.getElementById('weaponsGrid');
-                weaponsGrid.innerHTML = '';
-                
-                // تجميع الأسلحة حسب الفئة
-                const categories = {
-                    basic: { name: 'الأسلحة الأساسية', weapons: [] },
-                    sniper: { name: 'أسلحة القناصة', weapons: [] },
-                    explosive: { name: 'المتفجرات', weapons: [] },
-                    heavy: { name: 'الأسلحة الثقيلة', weapons: [] },
-                    futuristic: { name: 'الأسلحة المستقبلية', weapons: [] },
-                    defense: { name: 'الدروع والحماية', weapons: [] },
-                    support: { name: 'العلاج والدعم', weapons: [] },
-                    special: { name: 'الأدوات الخاصة', weapons: [] },
-                    legendary: { name: 'الأسلحة الأسطورية', weapons: [] }
-                };
-                
-                Object.entries(this.weapons).forEach(([key, weapon]) => {
-                    if (categories[weapon.category]) {
-                        categories[weapon.category].weapons.push({ key, ...weapon });
-                    }
-                });
-                
-                // عرض الأسلحة حسب الفئات
-                Object.entries(categories).forEach(([categoryKey, category]) => {
-                    if (category.weapons.length > 0) {
-                        // عنوان الفئة
-                        const categoryHeader = document.createElement('div');
-                        categoryHeader.className = 'col-span-full mb-4';
-                        categoryHeader.innerHTML = `
-                            <h3 class="text-2xl font-bold text-center bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-                                ${category.name}
-                            </h3>
-                            <div class="w-full h-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mt-2"></div>
-                        `;
-                        weaponsGrid.appendChild(categoryHeader);
-                        
-                        // أسلحة الفئة
-                        category.weapons.forEach(weapon => {
-                            const weaponCard = document.createElement('div');
-                            
-                            // ألوان حسب الندرة
-                            let rarityClass = '';
-                            let rarityBorder = '';
-                            switch (weapon.rarity) {
-                                case 'common': rarityClass = 'from-gray-700 to-gray-600'; rarityBorder = 'border-gray-500'; break;
-                                case 'uncommon': rarityClass = 'from-green-700 to-green-600'; rarityBorder = 'border-green-500'; break;
-                                case 'rare': rarityClass = 'from-blue-700 to-blue-600'; rarityBorder = 'border-blue-500'; break;
-                                case 'epic': rarityClass = 'from-purple-700 to-purple-600'; rarityBorder = 'border-purple-500'; break;
-                                case 'legendary': rarityClass = 'from-orange-700 to-orange-600'; rarityBorder = 'border-orange-500'; break;
-                                case 'mythic': rarityClass = 'from-red-700 to-red-600'; rarityBorder = 'border-red-500'; break;
-                            }
-                            
-                            weaponCard.className = `weapon-card bg-gradient-to-br ${rarityClass} rounded-2xl p-4 text-center text-white border-2 ${rarityBorder}`;
-                            
-                            let statsHTML = '';
-                            if (weapon.damage) {
-                                statsHTML = `<div class="bg-red-600/60 rounded-lg p-2 mb-2"><div class="text-sm font-bold">⚔️ ${weapon.damage[0]}-${weapon.damage[1]}</div></div>`;
-                            } else if (weapon.defense) {
-                                statsHTML = `<div class="bg-blue-600/60 rounded-lg p-2 mb-2"><div class="text-sm font-bold">🛡️ ${Math.round(weapon.defense * 100)}%</div></div>`;
-                            } else if (weapon.heal) {
-                                statsHTML = `<div class="bg-green-600/60 rounded-lg p-2 mb-2"><div class="text-sm font-bold">❤️ +${weapon.heal}</div></div>`;
-                            } else if (weapon.special) {
-                                statsHTML = `<div class="bg-purple-600/60 rounded-lg p-2 mb-2"><div class="text-sm font-bold">✨ خاص</div></div>`;
-                            }
-                            
-                            // شارة الندرة
-                            let rarityBadge = '';
-                            switch (weapon.rarity) {
-                                case 'common': rarityBadge = '<div class="text-xs bg-gray-600 px-2 py-1 rounded-full mb-2">عادي</div>'; break;
-                                case 'uncommon': rarityBadge = '<div class="text-xs bg-green-600 px-2 py-1 rounded-full mb-2">غير عادي</div>'; break;
-                                case 'rare': rarityBadge = '<div class="text-xs bg-blue-600 px-2 py-1 rounded-full mb-2">نادر</div>'; break;
-                                case 'epic': rarityBadge = '<div class="text-xs bg-purple-600 px-2 py-1 rounded-full mb-2">ملحمي</div>'; break;
-                                case 'legendary': rarityBadge = '<div class="text-xs bg-orange-600 px-2 py-1 rounded-full mb-2">أسطوري</div>'; break;
-                                case 'mythic': rarityBadge = '<div class="text-xs bg-red-600 px-2 py-1 rounded-full mb-2">خرافي</div>'; break;
-                            }
-                            
-                            weaponCard.innerHTML = `
-                                <div class="text-3xl mb-2">${weapon.icon}</div>
-                                ${rarityBadge}
-                                <h3 class="text-sm font-bold mb-2">${weapon.name}</h3>
-                                <p class="text-xs mb-2 text-gray-300 h-8 overflow-hidden">${weapon.description}</p>
-                                ${statsHTML}
-                                <div class="bg-yellow-500/40 rounded-lg p-2 mb-3">
-                                    <div class="text-lg font-bold">💰 ${weapon.cost}</div>
-                                </div>
-                                <button onclick="Game.buyWeapon('${weapon.key}', ${weapon.cost})" 
-                                        class="w-full btn-success text-white px-2 py-2 rounded-lg font-bold text-xs">
-                                    🛒 شراء
-                                </button>
-                            `;
-                            
-                            weaponsGrid.appendChild(weaponCard);
-                        });
-                    }
-                });
-            }
-            
-            buyWeapon(weaponType, cost) {
-                const teamIndex = parseInt(document.getElementById('shopTeamSelect').value) || 0;
-                const team = this.teams[teamIndex];
-                
-                if (team.points >= cost) {
-                    team.points -= cost;
-                    team.weapons.push(weaponType);
-                    this.totalWeaponsPurchased++;
-                    this.updateDisplay();
-                    this.showNotification(`🎉 ${team.name} اشترى ${this.weapons[weaponType].name} بنجاح! 🛒`, 'success');
-                } else {
-                    this.showNotification(`❌ نقاط غير كافية! تحتاج ${cost} نقطة ولديك ${team.points} فقط.`, 'error');
-                }
-            }
-            
-            selectWeapon(weaponIndex) {
-                this.selectedWeapon = weaponIndex;
-                this.updateAttackerWeapons();
-                const attackerIndex = parseInt(document.getElementById('attackerSelect').value) || 0;
-                const attacker = this.teams[attackerIndex];
-                this.showNotification(`تم اختيار ${this.weapons[attacker.weapons[weaponIndex]].name}! ⚔️`, 'info');
-            }
-            
-            attack() {
-                const attackerIndex = parseInt(document.getElementById('attackerSelect').value) || 0;
-                const targetIndex = parseInt(document.getElementById('targetSelect').value) || 0;
-                
-                if (attackerIndex === targetIndex) {
-                    this.showNotification('لا يمكن مهاجمة نفس الفريق! 🚫', 'error');
-                    return;
-                }
-                
-                const attacker = this.teams[attackerIndex];
-                const target = this.teams[targetIndex];
-                
-                if (attacker.health <= 0) {
-                    this.showNotification(`${attacker.name} خارج المعركة! 💀`, 'error');
-                    return;
-                }
-                
-                if (target.health <= 0) {
-                    this.showNotification(`${target.name} خارج المعركة بالفعل! 💀`, 'error');
-                    return;
-                }
-                
-                if (attacker.weapons.length === 0) {
-                    this.showNotification(`${attacker.name} لا يملك أسلحة! اذهب للمتجر! 🛒`, 'error');
-                    return;
-                }
-                
-                if (this.selectedWeapon === null || this.selectedWeapon >= attacker.weapons.length) {
-                    this.selectedWeapon = 0;
-                }
-                
-                const weaponType = attacker.weapons[this.selectedWeapon];
-                const weapon = this.weapons[weaponType];
-                
-                this.totalAttacks++;
-                this.totalBattlesFought++;
-                
-                let damage = 0;
-                let message = '';
-                
-                // معالجة الأدوات الخاصة
-                if (weapon.special) {
-                    switch (weapon.special) {
-                        case 'disable':
-                            // قنبلة EMP - تعطل الأسلحة الإلكترونية
-                            const electronicWeapons = ['laser', 'plasma', 'railgun', 'drone', 'hacker'];
-                            let disabledCount = 0;
-                            target.weapons = target.weapons.filter(w => {
-                                if (electronicWeapons.includes(w)) {
-                                    disabledCount++;
-                                    return false;
-                                }
-                                return true;
-                            });
-                            message = `${attacker.name} استخدم قنبلة EMP وعطل ${disabledCount} أسلحة إلكترونية! ⚡`;
-                            break;
-                            
-                        case 'stealth':
-                            // قنبلة دخان - تخفي الفريق
-                            this.specialEffects[attackerIndex] = { type: 'stealth', duration: 1 };
-                            message = `${attacker.name} استخدم قنبلة دخان وأصبح مخفياً! 💨`;
-                            break;
-                            
-                        case 'stun':
-                            // قنبلة وميض - تشل العدو
-                            this.specialEffects[targetIndex] = { type: 'stunned', duration: 1 };
-                            message = `${attacker.name} استخدم قنبلة وميض وشل ${target.name}! 💥`;
-                            break;
-                            
-                        case 'scout':
-                            // طائرة استطلاع - تكشف أسلحة العدو
-                            const enemyWeapons = target.weapons.map(w => this.weapons[w].name).join(', ');
-                            message = `${attacker.name} استخدم طائرة استطلاع! أسلحة ${target.name}: ${enemyWeapons || 'لا توجد'} 🛸`;
-                            break;
-                            
-                        case 'hack':
-                            // جهاز القرصنة - يسرق سلاح
-                            if (target.weapons.length > 0) {
-                                const stolenWeaponIndex = Math.floor(Math.random() * target.weapons.length);
-                                const stolenWeapon = target.weapons.splice(stolenWeaponIndex, 1)[0];
-                                attacker.weapons.push(stolenWeapon);
-                                this.weaponsStolen++;
-                                message = `${attacker.name} اخترق ${target.name} وسرق ${this.weapons[stolenWeapon].name}! 💻`;
-                            } else {
-                                message = `${attacker.name} حاول اختراق ${target.name} لكن لا توجد أسلحة للسرقة! 💻`;
-                            }
-                            break;
-                    }
-                } else if (weapon.heal) {
-                    const healAmount = weapon.heal;
-                    const oldHealth = attacker.health;
-                    attacker.health = Math.min(100, attacker.health + healAmount);
-                    const actualHeal = attacker.health - oldHealth;
-                    this.totalHealing += actualHeal;
-                    
-                    if (weapon.boost) {
-                        // حقنة الأدرينالين تعطي تعزيز
-                        this.specialEffects[attackerIndex] = { type: 'boosted', duration: 2 };
-                        message = `${attacker.name} استخدم ${weapon.name} واستعاد ${actualHeal} نقطة صحة وحصل على تعزيز! 💉`;
-                    } else {
-                        message = `${attacker.name} استخدم ${weapon.name} واستعاد ${actualHeal} نقطة صحة! 💚`;
-                    }
-                } else if (weapon.damage) {
-                    damage = Math.floor(Math.random() * (weapon.damage[1] - weapon.damage[0] + 1)) + weapon.damage[0];
-                    
-                    // تطبيق التعزيز
-                    if (this.specialEffects[attackerIndex]?.type === 'boosted') {
-                        damage = Math.floor(damage * 1.5);
-                        message += ' (معزز!) ';
-                    }
-                    
-                    // تطبيق الدفاع
-                    let defenseReduction = 0;
-                    if (target.weapons.includes('exosuit')) {
-                        defenseReduction = 0.7;
-                    } else if (target.weapons.includes('armor')) {
-                        defenseReduction = 0.5;
-                    } else if (target.weapons.includes('shield')) {
-                        defenseReduction = 0.3;
-                    }
-                    
-                    damage = Math.floor(damage * (1 - defenseReduction));
-                    target.health = Math.max(0, target.health - damage);
-                    this.totalDamageDealt += damage;
-                    
-                    if (damage > this.strongestHit) {
-                        this.strongestHit = damage;
-                    }
-                    
-                    message = `${attacker.name} هاجم ${target.name} بـ${weapon.name}! الضرر: ${damage} 💥`;
-                    if (defenseReduction > 0) {
-                        message += ` (تم تقليل الضرر بنسبة ${Math.round(defenseReduction * 100)}%)`;
-                    }
-                    
-                    // فحص التحدي الأول
-                    if (target.health <= 0) {
-                        this.checkChallenge('first_blood');
-                    }
-                    
-                    // فحص تحدي الرمية المثالية
-                    if (damage >= 100) {
-                        this.checkChallenge('perfect_shot');
-                    }
-                } else {
-                    message = `${attacker.name} استخدم ${weapon.name}! 🛡️`;
-                }
-                
-                // تقليل مدة التأثيرات الخاصة
-                Object.keys(this.specialEffects).forEach(teamIndex => {
-                    this.specialEffects[teamIndex].duration--;
-                    if (this.specialEffects[teamIndex].duration <= 0) {
-                        delete this.specialEffects[teamIndex];
-                    }
-                });
-                
-                // إزالة السلاح المستخدم (إلا الدفاعيات)
-                if (!['shield', 'armor', 'exosuit'].includes(weaponType)) {
-                    attacker.weapons.splice(this.selectedWeapon, 1);
-                    this.selectedWeapon = null;
-                }
-                
-                // فحص التحديات
-                this.checkChallenges();
-                
-                this.updateDisplay();
-                this.addToLog(message);
-                
-                // تأثيرات بصرية
-                if (damage > 0) {
-                    const targetCard = document.querySelector(`[data-team="${targetIndex}"]`);
-                    if (targetCard) {
-                        targetCard.classList.add('attack-animation');
-                        setTimeout(() => targetCard.classList.remove('attack-animation'), 800);
-                        this.showDamageText(targetCard, damage);
-                    }
-                }
-                
-                this.checkVictory();
-                this.showNotification(`✅ تم تنفيذ الهجوم بنجاح! ${damage > 0 ? `الضرر: ${damage}` : ''}`, 'success');
-            }
-            
-            showDamageText(element, damage) {
-                const damageDiv = document.createElement('div');
-                damageDiv.className = 'damage-text absolute text-red-500 font-bold text-3xl pointer-events-none z-50';
-                damageDiv.textContent = `-${damage}`;
-                damageDiv.style.top = '50%';
-                damageDiv.style.left = '50%';
-                damageDiv.style.transform = 'translate(-50%, -50%)';
-                
-                element.style.position = 'relative';
-                element.appendChild(damageDiv);
-                
-                setTimeout(() => damageDiv.remove(), 1500);
-            }
-            
-            addToLog(message) {
-                const logContainer = document.getElementById('battleLog');
-                const logEntry = document.createElement('div');
-                logEntry.className = 'mb-3 p-3 bg-white/10 rounded-lg border-l-4 border-red-500';
-                logEntry.innerHTML = `
-                    <div class="text-sm text-gray-400">${new Date().toLocaleTimeString('ar-SA')}</div>
-                    <div class="text-white font-semibold">${message}</div>
-                `;
-                logContainer.appendChild(logEntry);
-                logContainer.scrollTop = logContainer.scrollHeight;
-            }
-            
-            checkVictory() {
-                const aliveTeams = this.teams.filter(team => team.health > 0);
-                
-                if (aliveTeams.length === 1) {
-                    const winner = aliveTeams[0];
-                    document.getElementById('winnerInfo').innerHTML = `
-                        <div class="text-6xl mb-6">${winner.icon}</div>
-                        <div class="text-4xl font-bold mb-4">${winner.name} هو الفائز!</div>
-                        <div class="text-2xl mt-4">الصحة المتبقية: ${winner.health}</div>
-                    `;
-                    this.showVictory();
-                }
-            }
-            
-            resetGame() {
-                const defaultNames = [
-                    'فرقة الدم الأحمر',
-                    'حراس العاصفة الزرقاء', 
-                    'كتيبة الرعد الأخضر',
-                    'قوات الصاعقة الذهبية'
-                ];
-                
-                this.teams.forEach((team, index) => {
-                    team.name = defaultNames[index];
-                    team.health = 100;
-                    team.points = 100;
-                    team.weapons = [];
-                });
-                
-                this.selectedWeapon = null;
-                this.totalWeaponsPurchased = 0;
-                this.totalBattlesFought = 0;
-                this.totalAttacks = 0;
-                this.strongestHit = 0;
-                this.specialEffects = {};
-                this.achievements = [];
-                
-                // نظام التحديات
-                this.challenges = [
-                    { id: 'first_blood', name: 'الدم الأول', description: 'اهزم عدو للمرة الأولى', reward: 50, completed: false, icon: '🩸' },
-                    { id: 'weapon_master', name: 'سيد الأسلحة', description: 'اشتري 10 أسلحة مختلفة', reward: 100, completed: false, icon: '⚔️' },
-                    { id: 'survivor', name: 'الناجي', description: 'ابق على قيد الحياة مع 10 صحة أو أقل', reward: 75, completed: false, icon: '💀' },
-                    { id: 'destroyer', name: 'المدمر', description: 'اصنع ضرر 500 نقطة إجمالي', reward: 150, completed: false, icon: '💥' },
-                    { id: 'millionaire', name: 'المليونير', description: 'اجمع 1000 نقطة', reward: 200, completed: false, icon: '💰' },
-                    { id: 'legendary_hunter', name: 'صياد الأساطير', description: 'اشتري سلاح أسطوري', reward: 300, completed: false, icon: '🏆' },
-                    { id: 'perfect_shot', name: 'الرمية المثالية', description: 'اصنع ضرر 100+ في ضربة واحدة', reward: 120, completed: false, icon: '🎯' },
-                    { id: 'medic', name: 'الطبيب', description: 'استخدم 5 أدوات علاج', reward: 80, completed: false, icon: '🏥' },
-                    { id: 'tank', name: 'الدبابة', description: 'امتلك 3 دروع في نفس الوقت', reward: 100, completed: false, icon: '🛡️' },
-                    { id: 'hacker_master', name: 'سيد القرصنة', description: 'اسرق 3 أسلحة باستخدام جهاز القرصنة', reward: 180, completed: false, icon: '💻' }
-                ];
-                
-                this.totalDamageDealt = 0;
-                this.totalHealing = 0;
-                this.weaponsStolen = 0;
-                
-                document.getElementById('battleLog').innerHTML = '';
-                document.querySelectorAll('.team-name-input').forEach(input => input.value = '');
-                
-                this.createTeamCards();
-                this.updateSelectOptions();
-                this.updateDisplay();
-                this.showHome();
-                
-                this.showNotification('🔄 تم إعادة تشغيل اللعبة بنجاح! ✨', 'success');
-            }
-            
-            showNotification(message, type = 'info') {
-                const notification = document.createElement('div');
-                notification.className = `notification notification-${type}`;
-                notification.textContent = message;
-                
-                document.body.appendChild(notification);
-                
-                setTimeout(() => notification.classList.add('show'), 100);
-                setTimeout(() => {
-                    notification.classList.remove('show');
-                    setTimeout(() => notification.remove(), 300);
-                }, 3000);
-            }
-            
-            closeDeveloperModal() {
-                document.getElementById('developerModal').style.display = 'none';
-            }
-            
-            showHome() {
-                this.hideAllScreens();
-                document.getElementById('homeScreen').classList.remove('hidden');
-            }
-            
-            showShop() {
-                this.hideAllScreens();
-                document.getElementById('shopScreen').classList.remove('hidden');
-                this.displayWeapons();
-                this.updateDisplay();
-            }
-            
-            showBattle() {
-                this.hideAllScreens();
-                document.getElementById('battleScreen').classList.remove('hidden');
-                this.updateDisplay();
-            }
-            
-            showVictory() {
-                this.hideAllScreens();
-                document.getElementById('victoryScreen').classList.remove('hidden');
-            }
-            
-            checkChallenge(challengeId) {
-                const challenge = this.challenges.find(c => c.id === challengeId);
-                if (challenge && !challenge.completed) {
-                    challenge.completed = true;
-                    this.achievements.push(challenge);
-                    
-                    // إضافة المكافأة
-                    this.teams.forEach(team => team.points += challenge.reward);
-                    
-                    this.showNotification(`🏆 تحدي مكتمل: ${challenge.name}! مكافأة: ${challenge.reward} نقطة لكل فريق!`, 'success');
-                }
-            }
-            
-            checkChallenges() {
-                // فحص تحدي سيد الأسلحة
-                const totalWeapons = this.teams.reduce((sum, team) => sum + team.weapons.length, 0);
-                if (totalWeapons >= 10) {
-                    this.checkChallenge('weapon_master');
-                }
-                
-                // فحص تحدي الناجي
-                this.teams.forEach(team => {
-                    if (team.health <= 10 && team.health > 0) {
-                        this.checkChallenge('survivor');
-                    }
-                });
-                
-                // فحص تحدي المدمر
-                if (this.totalDamageDealt >= 500) {
-                    this.checkChallenge('destroyer');
-                }
-                
-                // فحص تحدي المليونير
-                this.teams.forEach(team => {
-                    if (team.points >= 1000) {
-                        this.checkChallenge('millionaire');
-                    }
-                });
-                
-                // فحص تحدي صياد الأساطير
-                const hasLegendary = this.teams.some(team => 
-                    team.weapons.some(weapon => this.weapons[weapon].rarity === 'mythic')
-                );
-                if (hasLegendary) {
-                    this.checkChallenge('legendary_hunter');
-                }
-                
-                // فحص تحدي الطبيب
-                if (this.totalHealing >= 200) {
-                    this.checkChallenge('medic');
-                }
-                
-                // فحص تحدي الدبابة
-                this.teams.forEach(team => {
-                    const defenseWeapons = team.weapons.filter(w => ['shield', 'armor', 'exosuit'].includes(w));
-                    if (defenseWeapons.length >= 3) {
-                        this.checkChallenge('tank');
-                    }
-                });
-                
-                // فحص تحدي سيد القرصنة
-                if (this.weaponsStolen >= 3) {
-                    this.checkChallenge('hacker_master');
-                }
-            }
-            
-            displayChallenges() {
-                const challengesList = document.getElementById('challengesList');
-                const achievementsList = document.getElementById('achievementsList');
-                
-                challengesList.innerHTML = '';
-                achievementsList.innerHTML = '';
-                
-                // عرض التحديات
-                this.challenges.forEach(challenge => {
-                    const challengeCard = document.createElement('div');
-                    const isCompleted = challenge.completed;
-                    
-                    challengeCard.className = `bg-gradient-to-br ${isCompleted ? 'from-green-900/80 to-green-700/60 border-green-500' : 'from-gray-900/80 to-gray-700/60 border-gray-500'} rounded-2xl p-6 border-2`;
-                    
-                    challengeCard.innerHTML = `
-                        <div class="text-center mb-4">
-                            <div class="text-4xl mb-2">${challenge.icon}</div>
-                            <h3 class="text-xl font-bold ${isCompleted ? 'text-green-400' : 'text-white'}">${challenge.name}</h3>
-                        </div>
-                        
-                        <p class="text-gray-300 text-sm mb-4 text-center">${challenge.description}</p>
-                        
-                        <div class="text-center">
-                            <div class="bg-yellow-500/30 rounded-lg p-2 mb-3">
-                                <div class="text-lg font-bold text-yellow-400">💰 ${challenge.reward} نقطة</div>
-                            </div>
-                            
-                            ${isCompleted ? 
-                                '<div class="bg-green-600 text-white px-4 py-2 rounded-lg font-bold">✅ مكتمل</div>' :
-                                '<div class="bg-gray-600 text-gray-300 px-4 py-2 rounded-lg">⏳ قيد التقدم</div>'
-                            }
-                        </div>
-                    `;
-                    
-                    challengesList.appendChild(challengeCard);
-                });
-                
-                // عرض الإنجازات المكتملة
-                if (this.achievements.length === 0) {
-                    achievementsList.innerHTML = '<div class="col-span-full text-center text-gray-400 text-lg">لا توجد إنجازات مكتملة بعد</div>';
-                } else {
-                    this.achievements.forEach(achievement => {
-                        const achievementBadge = document.createElement('div');
-                        achievementBadge.className = 'bg-gradient-to-br from-yellow-600 to-orange-600 rounded-xl p-4 text-center border-2 border-yellow-500';
-                        achievementBadge.innerHTML = `
-                            <div class="text-3xl mb-2">${achievement.icon}</div>
-                            <div class="text-sm font-bold text-white">${achievement.name}</div>
-                        `;
-                        achievementsList.appendChild(achievementBadge);
-                    });
-                }
-                
-                // تحديث الإحصائيات
-                document.getElementById('totalDamageDisplay').textContent = this.totalDamageDealt;
-                document.getElementById('totalHealingDisplay').textContent = this.totalHealing;
-                document.getElementById('weaponsPurchasedDisplay').textContent = this.totalWeaponsPurchased;
-                document.getElementById('weaponsStolenDisplay').textContent = this.weaponsStolen;
-            }
-            
-            showChallenges() {
-                this.hideAllScreens();
-                document.getElementById('challengesScreen').classList.remove('hidden');
-                this.displayChallenges();
-            }
-            
-            hideAllScreens() {
-                const screens = ['homeScreen', 'shopScreen', 'battleScreen', 'challengesScreen', 'victoryScreen'];
-                screens.forEach(screenId => {
-                    document.getElementById(screenId).classList.add('hidden');
-                });
-            }
-        }
-        
-        // إنشاء مثيل اللعبة
-        const Game = new TeamBattleGame();
-        
-        // تحديث العرض عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', function() {
-            Game.updateDisplay();
-        });
-    </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96decc34240b5ccc',t:'MTc1NDk4OTM4Ny4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+<body class="bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 min-h-screen">
+<header class="bg-white shadow-lg border-b-4 border-blue-500">
+<div class="container mx-auto px-6 py-6">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-4 space-x-reverse">
+<div class="w-12 h-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center text-white text-2xl font-bold">
+🎓
+</div>
+<div>
+<h1 class="text-3xl font-black text-gray-800">نظام البطاقات التعليمية المتقدم</h1>
+<p class="text-gray-600 font-medium">مدعوم بتقنية Gemini AI للتعلم الذكي</p>
+</div>
+</div>
+<div class="flex items-center space-x-4 space-x-reverse">
+<button onclick=showHelpModal() class="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-4 py-2 rounded-full font-bold text-sm hover:from-green-600 hover:to-emerald-600 transition-all duration-300 transform hover:scale-105">
+📖 شرح اللعبة
+</button>
+<button onclick=showDeveloperModal() class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full font-bold text-sm hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105">
+👨‍💻 المطور
+</button>
+<div class="bg-green-100 text-green-800 px-4 py-2 rounded-full font-bold text-sm">
+🤖 AI متصل
+</div>
+</div>
+</div>
+</div>
+</header>
+<div class="container mx-auto px-6 py-8 max-w-7xl">
+<section class="bg-white rounded-2xl shadow-xl p-8 mb-8 border border-gray-100">
+<div class="flex items-center justify-between mb-8">
+<h2 class="text-2xl font-bold text-gray-800 flex items-center">
+<span class="text-3xl ml-3">🎯</span>
+مولد البطاقات التعليمية
+</h2>
+<div class="flex space-x-3 space-x-reverse">
+<button id=aiModeBtn onclick='switchMode("ai")' class="px-6 py-3 rounded-xl font-bold transition-all duration-300 bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700">
+🤖 الذكاء الاصطناعي
+</button>
+<button id=manualModeBtn onclick='switchMode("manual")' class="px-6 py-3 rounded-xl font-bold transition-all duration-300 bg-gray-400 text-white hover:bg-gray-500">
+✏️ الإدخال اليدوي
+</button>
+</div>
+</div>
+<div id=aiMode class=mode-content>
+<div class="grid lg:grid-cols-3 gap-6 mb-6">
+<div>
+<label class="block text-sm font-bold text-gray-700 mb-3">الموضوع *</label>
+<input id=topic placeholder="مثال: الفيزياء، الكيمياء، التاريخ" class="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 text-lg font-medium">
+</div>
+<div>
+<label class="block text-sm font-bold text-gray-700 mb-3">عدد البطاقات</label>
+<select id=cardCount class="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-lg font-medium">
+<option value=5>5 بطاقات</option>
+<option value=8>8 بطاقات</option>
+<option value=10 selected>10 بطاقات</option>
+<option value=15>15 بطاقة</option>
+<option value=20>20 بطاقة</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-bold text-gray-700 mb-3">المستوى التعليمي</label>
+<select id=level class="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-lg font-medium">
+<option value=ابتدائي>ابتدائي</option>
+<option value=متوسط selected>متوسط</option>
+<option value=ثانوي>ثانوي</option>
+<option value=جامعي>جامعي</option>
+<option value=متقدم>متقدم</option>
+</select>
+</div>
+</div>
+<div class=mb-6>
+<label class="block text-sm font-bold text-gray-700 mb-3">تفاصيل إضافية (اختياري)</label>
+<textarea id=additionalDetails placeholder="أضف تفاصيل محددة حول ما تريد التركيز عليه..." class="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 resize-none font-medium" rows=3></textarea>
+</div>
+<button onclick=generateCards() id=generateBtn class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 px-8 rounded-xl font-bold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-[1.02] shadow-lg hover:shadow-xl">
+<span id=generateBtnText>🚀 توليد البطاقات بالذكاء الاصطناعي</span>
+</button>
+<div id=generationStatus class="mt-6 text-center hidden">
+<div class="bg-blue-50 border-2 border-blue-200 rounded-xl p-6">
+<div class="spinner mb-3"></div>
+<p class="text-blue-700 font-bold text-lg">جاري التواصل مع Gemini AI...</p>
+<p class="text-blue-600 text-sm mt-2">يرجى الانتظار، قد تستغرق العملية دقيقة واحدة</p>
+</div>
+</div>
+</div>
+<div id=manualMode class="mode-content hidden">
+<div class="grid md:grid-cols-2 gap-6 mb-6">
+<div>
+<label class="block text-sm font-bold text-gray-700 mb-3">السؤال *</label>
+<textarea id=manualQuestion placeholder="اكتب السؤال هنا..." class="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-green-500/20 focus:border-green-500 transition-all duration-300 resize-none font-medium" rows=4></textarea>
+</div>
+<div>
+<label class="block text-sm font-bold text-gray-700 mb-3">الإجابة *</label>
+<textarea id=manualAnswer placeholder="اكتب الإجابة هنا..." class="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-green-500/20 focus:border-green-500 transition-all duration-300 resize-none font-medium" rows=4></textarea>
+</div>
+</div>
+<div class="flex gap-4 mb-6">
+<button onclick=addManualCard() class="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 text-white py-3 px-6 rounded-xl font-bold text-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-300 transform hover:scale-[1.02]">
+➕ إضافة البطاقة
+</button>
+<button onclick=saveManualCards() id=saveManualBtn class="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-6 rounded-xl font-bold text-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-[1.02] hidden">
+💾 حفظ البطاقات (<span id=manualCardCount>0</span>)
+</button>
+</div>
+<div id=manualCardsList class=hidden>
+<h3 class="text-lg font-bold text-gray-800 mb-4 border-b-2 border-gray-200 pb-2">البطاقات المضافة</h3>
+<div id=manualCardsContainer class="space-y-4 max-h-60 overflow-y-auto"></div>
+</div>
+</div>
+</section>
+<section class="bg-white rounded-2xl shadow-xl p-8 mb-8 border border-gray-100">
+<h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+<span class="text-3xl ml-3">👥</span>
+إدارة الطلاب
+</h2>
+<div class="flex gap-4 mb-6">
+<input id=studentName placeholder="اسم الطالب الجديد" class="flex-1 p-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-green-500/20 focus:border-green-500 transition-all duration-300 text-lg font-medium">
+<button onclick=addStudent() class="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+إضافة طالب
+</button>
+</div>
+<div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 mb-6 border-2 border-blue-200">
+<h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+<span class="text-2xl ml-3">📝</span>
+إضافة دفعة من الطلاب
+</h3>
+<div class="grid md:grid-cols-2 gap-6">
+<div>
+<label class="block text-sm font-bold text-gray-700 mb-3">أسماء الطلاب (كل اسم في سطر منفصل)</label>
+<textarea id=batchStudents placeholder="أحمد محمد&#10;فاطمة علي&#10;محمد سالم&#10;نور الهدى&#10;عبدالله أحمد" class="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-300 resize-none font-medium" rows=6></textarea>
+</div>
+<div class="flex flex-col justify-between">
+<div class=mb-4>
+<h4 class="font-bold text-gray-700 mb-3">أدوات سريعة:</h4>
+<div class=space-y-3>
+<button onclick=generateRandomNames() class="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 px-4 rounded-xl font-bold hover:from-purple-600 hover:to-pink-600 transition-all duration-300 transform hover:scale-105">
+🎲 توليد أسماء عشوائية
+</button>
+<button onclick=clearBatchStudents() class="w-full bg-gray-500 text-white py-3 px-4 rounded-xl font-bold hover:bg-gray-600 transition-all duration-300">
+🗑️ مسح الأسماء
+</button>
+</div>
+</div>
+<button onclick=addBatchStudents() class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-4 px-6 rounded-xl font-bold text-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+➕ إضافة جميع الطلاب
+</button>
+</div>
+</div>
+</div>
+<div class="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-2xl p-6 mb-6 border-2 border-yellow-200">
+<h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+<span class="text-2xl ml-3">🎯</span>
+اختيار طالب عشوائي
+</h3>
+<div class="flex items-center gap-4">
+<button onclick=selectRandomStudent() class="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-8 py-4 rounded-xl font-bold text-lg hover:from-yellow-600 hover:to-orange-600 transition-all duration-300 transform hover:scale-105 shadow-lg">
+🎲 اختيار عشوائي
+</button>
+<div id=randomStudentResult class="flex-1 bg-white border-2 border-gray-200 rounded-xl p-4 text-center text-gray-500 font-medium">
+سيظهر الطالب المختار هنا...
+</div>
+</div>
+</div>
+<div id=studentsList class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+</section>
+<section id=cardsSection class="bg-white rounded-2xl shadow-xl p-8 mb-8 border border-gray-100 hidden">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-2xl font-bold text-gray-800 flex items-center">
+<span class="text-3xl ml-3">📚</span>
+البطاقات التعليمية
+</h2>
+<div class="flex items-center gap-4">
+<select id=studentSelect onchange=switchStudent() class="p-3 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-blue-500/20 focus:border-blue-500 text-lg font-medium">
+<option value="">اختر الطالب</option>
+</select>
+<button onclick=showPrintModal() class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-xl font-bold hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+🖨️ طباعة
+</button>
+<div class="bg-gray-100 px-4 py-2 rounded-full text-sm font-bold text-gray-700">
+<span id=cardCounter>0 بطاقة</span>
+</div>
+</div>
+</div>
+<div id=progressOverview class="mb-8 hidden">
+<div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 border-2 border-blue-200">
+<h3 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+<span class="text-2xl ml-3">📊</span>
+تقدم الطالب: <span id=currentStudentName class=text-blue-600></span>
+</h3>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+<div class="bg-red-100 border-2 border-red-200 rounded-xl p-4">
+<div class="text-3xl text-red-600 font-bold" id=newCards>0</div>
+<div class="text-sm text-red-700 font-bold">بطاقات جديدة</div>
+</div>
+<div class="bg-yellow-100 border-2 border-yellow-200 rounded-xl p-4">
+<div class="text-3xl text-yellow-600 font-bold" id=learningCards>0</div>
+<div class="text-sm text-yellow-700 font-bold">قيد التعلم</div>
+</div>
+<div class="bg-blue-100 border-2 border-blue-200 rounded-xl p-4">
+<div class="text-3xl text-blue-600 font-bold" id=reviewCards>0</div>
+<div class="text-sm text-blue-700 font-bold">للمراجعة</div>
+</div>
+<div class="bg-green-100 border-2 border-green-200 rounded-xl p-4">
+<div class="text-3xl text-green-600 font-bold" id=masteredCards>0</div>
+<div class="text-sm text-green-700 font-bold">متقنة</div>
+</div>
+</div>
+</div>
+</div>
+<div id=flashcardsContainer class="grid md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+</section>
+<section id=quizSection class="bg-white rounded-2xl shadow-xl p-8 mb-8 border border-gray-100 hidden">
+<h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+<span class="text-3xl ml-3">🎯</span>
+اختبار تفاعلي
+</h2>
+<div id=quizControls class=mb-8>
+<div class="grid md:grid-cols-2 gap-6 mb-6">
+<div>
+<label class="block text-sm font-bold text-gray-700 mb-3">اختر الطالب</label>
+<select id=quizStudentSelect class="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 text-lg font-medium">
+<option value="">جميع الطلاب</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-bold text-gray-700 mb-3">نوع الاختبار</label>
+<select id=quizType class="w-full p-4 border-2 border-gray-200 rounded-xl focus:ring-4 focus:ring-purple-500/20 focus:border-purple-500 text-lg font-medium">
+<option value=mixed>اختبار شامل</option>
+<option value=new>البطاقات الجديدة</option>
+<option value=learning>قيد التعلم</option>
+<option value=review>للمراجعة</option>
+</select>
+</div>
+</div>
+<button onclick=startQuiz() class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-8 rounded-xl font-bold text-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-[1.02] shadow-lg">
+🎮 بدء الاختبار
+</button>
+</div>
+<div id=quizGame class=hidden>
+<div class=mb-6>
+<div class="flex justify-between items-center mb-4">
+<div class="text-lg font-bold text-gray-700">
+السؤال <span id=currentQuestionNum>1</span> من <span id=totalQuestions>10</span>
+</div>
+<div class="text-lg font-bold text-blue-600">
+النقاط: <span id=currentScore>0</span>
+</div>
+</div>
+<div class="w-full bg-gray-200 rounded-full h-3">
+<div id=progressBar class="bg-gradient-to-r from-blue-500 to-purple-500 h-3 rounded-full transition-all duration-500" style=width:0%></div>
+</div>
+</div>
+<div class="bg-gradient-to-r from-indigo-50 to-purple-50 rounded-2xl p-8 mb-6">
+<div id=questionText class="text-xl font-bold text-gray-800 text-center mb-6"></div>
+<div id=answerOptions class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+</div>
+<div id=questionFeedback class="hidden mb-6"></div>
+</div>
+</section>
+<section class="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+<h2 class="text-2xl font-bold text-gray-800 mb-8 flex items-center">
+<span class="text-3xl ml-3">🏆</span>
+لوحة المتصدرين
+</h2>
+<div id=leaderboardContent>
+<div class="text-center py-12 text-gray-500">
+<div class="text-6xl mb-4">📊</div>
+<p class="text-xl font-medium">أضف طلاباً وابدأ الاختبار لرؤية النتائج</p>
+</div>
+</div>
+</section>
+</div>
+<div id=helpModal class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+<div class="bg-white rounded-2xl shadow-2xl max-w-5xl w-full max-h-[90vh] overflow-hidden">
+<div class="p-6 border-b border-gray-200 flex justify-between items-center bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+<h3 class="text-2xl font-bold flex items-center">
+<span class="text-3xl ml-3">📖</span>
+دليل استخدام نظام البطاقات التعليمية
+</h3>
+<button onclick=closeHelpModal() class="text-white hover:text-gray-200 text-2xl font-bold p-2 rounded-full hover:bg-white hover:bg-opacity-20 transition-all duration-300">
+✕
+</button>
+</div>
+<div class="p-6 overflow-y-auto max-h-[75vh]">
+<div class=space-y-8>
+<div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-6 border-2 border-blue-200">
+<h4 class="text-2xl font-bold text-blue-800 mb-4 flex items-center">
+<span class="text-3xl ml-3">🎯</span>
+نظرة عامة
+</h4>
+<p class="text-gray-700 text-lg leading-relaxed">
+نظام البطاقات التعليمية المتقدم هو أداة تعليمية تفاعلية تستخدم تقنية الذكاء الاصطناعي لإنشاء بطاقات تعليمية مخصصة. يساعد المعلمين والطلاب على التعلم بطريقة ممتعة وفعالة من خلال نظام التكرار المتباعد والاختبارات التفاعلية.
+</p>
+</div>
+<div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl p-6 border-2 border-green-200">
+<h4 class="text-2xl font-bold text-green-800 mb-4 flex items-center">
+<span class="text-3xl ml-3">🚀</span>
+كيفية البدء
+</h4>
+<div class="grid md:grid-cols-2 gap-6">
+<div>
+<h5 class="text-lg font-bold text-green-700 mb-3">1️⃣ إنشاء البطاقات</h5>
+<ul class="space-y-2 text-gray-700">
+<li class="flex items-start"><span class="text-blue-500 ml-2">•</span> اختر "الذكاء الاصطناعي" لتوليد بطاقات تلقائياً</li>
+<li class="flex items-start"><span class="text-blue-500 ml-2">•</span> أو اختر "الإدخال اليدوي" لإنشاء بطاقات مخصصة</li>
+<li class="flex items-start"><span class="text-blue-500 ml-2">•</span> حدد الموضوع والمستوى التعليمي</li>
+</ul>
+</div>
+<div>
+<h5 class="text-lg font-bold text-green-700 mb-3">2️⃣ إضافة الطلاب</h5>
+<ul class="space-y-2 text-gray-700">
+<li class="flex items-start"><span class="text-blue-500 ml-2">•</span> أضف طلاب فردياً أو كدفعة واحدة</li>
+<li class="flex items-start"><span class="text-blue-500 ml-2">•</span> استخدم "توليد أسماء عشوائية" للتجربة</li>
+<li class="flex items-start"><span class="text-blue-500 ml-2">•</span> اختر طلاب عشوائياً للمشاركة</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-2xl p-6 border-2 border-purple-200">
+<h4 class="text-2xl font-bold text-purple-800 mb-4 flex items-center">
+<span class="text-3xl ml-3">🧠</span>
+نظام التعلم الذكي
+</h4>
+<div class="grid md:grid-cols-4 gap-4 mb-6">
+<div class="bg-red-100 border-2 border-red-200 rounded-xl p-4 text-center">
+<div class="text-2xl mb-2">🆕</div>
+<h5 class="font-bold text-red-700">بطاقات جديدة</h5>
+<p class="text-sm text-red-600">لم يتم دراستها بعد</p>
+</div>
+<div class="bg-yellow-100 border-2 border-yellow-200 rounded-xl p-4 text-center">
+<div class="text-2xl mb-2">📚</div>
+<h5 class="font-bold text-yellow-700">قيد التعلم</h5>
+<p class="text-sm text-yellow-600">تحتاج مراجعة متكررة</p>
+</div>
+<div class="bg-blue-100 border-2 border-blue-200 rounded-xl p-4 text-center">
+<div class="text-2xl mb-2">🔄</div>
+<h5 class="font-bold text-blue-700">للمراجعة</h5>
+<p class="text-sm text-blue-600">مراجعة دورية</p>
+</div>
+<div class="bg-green-100 border-2 border-green-200 rounded-xl p-4 text-center">
+<div class="text-2xl mb-2">✅</div>
+<h5 class="font-bold text-green-700">متقنة</h5>
+<p class="text-sm text-green-600">تم إتقانها بالكامل</p>
+</div>
+</div>
+<div class="bg-white rounded-xl p-4 border-2 border-gray-200">
+<h5 class="font-bold text-gray-800 mb-3">كيفية التقييم:</h5>
+<div class="grid md:grid-cols-3 gap-4">
+<div class="flex items-center">
+<span class="text-2xl ml-3">😰</span>
+<div>
+<div class="font-bold text-red-600">صعب</div>
+<div class="text-sm text-gray-600">لم أتذكر الإجابة</div>
+</div>
+</div>
+<div class="flex items-center">
+<span class="text-2xl ml-3">😊</span>
+<div>
+<div class="font-bold text-yellow-600">جيد</div>
+<div class="text-sm text-gray-600">تذكرت بصعوبة</div>
+</div>
+</div>
+<div class="flex items-center">
+<span class="text-2xl ml-3">😄</span>
+<div>
+<div class="font-bold text-green-600">سهل</div>
+<div class="text-sm text-gray-600">تذكرت بسهولة</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-gradient-to-r from-orange-50 to-red-50 rounded-2xl p-6 border-2 border-orange-200">
+<h4 class="text-2xl font-bold text-orange-800 mb-4 flex items-center">
+<span class="text-3xl ml-3">⭐</span>
+المميزات الرئيسية
+</h4>
+<div class="grid md:grid-cols-2 gap-6">
+<div class=space-y-4>
+<div class="flex items-start">
+<span class="text-2xl ml-3">🤖</span>
+<div>
+<h5 class="font-bold text-gray-800">توليد ذكي للبطاقات</h5>
+<p class="text-sm text-gray-600">استخدام Gemini AI لإنشاء أسئلة وأجوبة متنوعة</p>
+</div>
+</div>
+<div class="flex items-start">
+<span class="text-2xl ml-3">📊</span>
+<div>
+<h5 class="font-bold text-gray-800">تتبع التقدم</h5>
+<p class="text-sm text-gray-600">مراقبة أداء كل طالب وتقدمه الفردي</p>
+</div>
+</div>
+<div class="flex items-start">
+<span class="text-2xl ml-3">🎮</span>
+<div>
+<h5 class="font-bold text-gray-800">اختبارات تفاعلية</h5>
+<p class="text-sm text-gray-600">اختبارات متنوعة مع نظام نقاط محفز</p>
+</div>
+</div>
+</div>
+<div class=space-y-4>
+<div class="flex items-start">
+<span class="text-2xl ml-3">🏆</span>
+<div>
+<h5 class="font-bold text-gray-800">لوحة المتصدرين</h5>
+<p class="text-sm text-gray-600">تحفيز الطلاب من خلال المنافسة الصحية</p>
+</div>
+</div>
+<div class="flex items-start">
+<span class="text-2xl ml-3">🖨️</span>
+<div>
+<h5 class="font-bold text-gray-800">طباعة البطاقات</h5>
+<p class="text-sm text-gray-600">إمكانية طباعة البطاقات للاستخدام الورقي</p>
+</div>
+</div>
+<div class="flex items-start">
+<span class="text-2xl ml-3">🎲</span>
+<div>
+<h5 class="font-bold text-gray-800">اختيار عشوائي</h5>
+<p class="text-sm text-gray-600">اختيار طلاب عشوائياً للمشاركة والتفاعل</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-2xl p-6 border-2 border-indigo-200">
+<h4 class="text-2xl font-bold text-indigo-800 mb-4 flex items-center">
+<span class="text-3xl ml-3">💡</span>
+نصائح للاستخدام الأمثل
+</h4>
+<div class="grid md:grid-cols-2 gap-6">
+<div>
+<h5 class="text-lg font-bold text-indigo-700 mb-3">للمعلمين:</h5>
+<ul class="space-y-2 text-gray-700">
+<li class="flex items-start"><span class="text-green-500 ml-2">✓</span> ابدأ بموضوع محدد وواضح</li>
+<li class="flex items-start"><span class="text-green-500 ml-2">✓</span> اختر المستوى التعليمي المناسب</li>
+<li class="flex items-start"><span class="text-green-500 ml-2">✓</span> راقب تقدم الطلاب بانتظام</li>
+<li class="flex items-start"><span class="text-green-500 ml-2">✓</span> استخدم الاختيار العشوائي لزيادة التفاعل</li>
+</ul>
+</div>
+<div>
+<h5 class="text-lg font-bold text-indigo-700 mb-3">للطلاب:</h5>
+<ul class="space-y-2 text-gray-700">
+<li class="flex items-start"><span class="text-green-500 ml-2">✓</span> اقرأ السؤال بعناية قبل الإجابة</li>
+<li class="flex items-start"><span class="text-green-500 ml-2">✓</span> كن صادقاً في تقييم صعوبة البطاقة</li>
+<li class="flex items-start"><span class="text-green-500 ml-2">✓</span> راجع البطاقات الصعبة بانتظام</li>
+<li class="flex items-start"><span class="text-green-500 ml-2">✓</span> شارك في الاختبارات لكسب النقاط</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id=developerModal class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+<div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
+<div class="p-6 border-b border-gray-200 flex justify-between items-center bg-gradient-to-r from-purple-600 to-pink-600 text-white">
+<h3 class="text-2xl font-bold flex items-center">
+<span class="text-3xl ml-3">👨‍💻</span>
+معلومات المطور
+</h3>
+<button onclick=closeDeveloperModal() class="text-white hover:text-gray-200 text-2xl font-bold p-2 rounded-full hover:bg-white hover:bg-opacity-20 transition-all duration-300">
+✕
+</button>
+</div>
+<div class="p-8 text-center">
+<div class="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-6">
+👨‍💻
+</div>
+<h4 class="text-2xl font-bold text-gray-800 mb-2">أ. عبد الرحمن نصر الله</h4>
+<p class="text-gray-600 mb-4">معلم للغة العربية</p>
+<div class="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-4 border-2 border-blue-200">
+<p class="text-gray-700 text-sm leading-relaxed">
+معلم للغة العربية ومعلم للقراءة والكتابة بطريقة نور البيان.
+</p>
+</div>
+<div class=mt-6>
+<p class="text-xs text-gray-500">
+تم تطوير هذا التطبيق بعناية لخدمة التعليم
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id=printModal class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+<div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden">
+<div class="p-6 border-b border-gray-200 flex justify-between items-center">
+<h3 class="text-2xl font-bold text-gray-800">🖨️ معاينة الطباعة</h3>
+<div class="flex gap-3">
+<button onclick=printCards() class="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-blue-700 transition-all duration-300">
+طباعة
+</button>
+<button onclick=closePrintModal() class="bg-gray-500 text-white px-6 py-2 rounded-xl font-bold hover:bg-gray-600 transition-all duration-300">
+إغلاق
+</button>
+</div>
+</div>
+<div class="p-6 overflow-y-auto max-h-[70vh]">
+<div id=printPreviewContent></div>
+</div>
+</div>
+</div>
+<div id=instagramModal class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center p-4">
+<div class="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
+<div class="p-6 border-b border-gray-200 flex justify-between items-center bg-gradient-to-r from-pink-500 to-purple-600 text-white">
+<h3 class="text-2xl font-bold flex items-center">
+<span class="text-3xl ml-3">📱</span>
+تابعنا على الانستقرام
+</h3>
+<button onclick=closeInstagramModal() class="text-white hover:text-gray-200 text-2xl font-bold p-2 rounded-full hover:bg-white hover:bg-opacity-20 transition-all duration-300">
+✕
+</button>
+</div>
+<div class="p-8 text-center">
+<div class="w-20 h-20 bg-gradient-to-r from-pink-500 to-purple-600 rounded-full flex items-center justify-center text-white text-3xl font-bold mx-auto mb-6">
+📸
+</div>
+<h4 class="text-2xl font-bold text-gray-800 mb-2">أ.عبد الرحمن نصر الله</h4>
+<p class="text-gray-600 mb-6">مطور التطبيق</p>
+<div class="bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl p-4 border-2 border-pink-200 mb-6">
+<p class="text-gray-700 text-sm leading-relaxed mb-4">
+تابع حسابي على الانستقرام للمزيد من المشاريع التعليمية والتقنية المميزة!
+</p>
+<a href=https://www.instagram.com/nasrallah_2002/ target=_blank class="inline-flex items-center bg-gradient-to-r from-pink-500 to-purple-600 text-white px-6 py-3 rounded-xl font-bold hover:from-pink-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+<span class="text-xl ml-2">📱</span>
+@nasrallah_2002
+</a>
+</div>
+<div class="flex justify-center gap-4">
+<button onclick=closeInstagramModal(),generateCardsAfterModal() class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-xl font-bold hover:from-blue-700 hover:to-purple-700 transition-all duration-300">
+متابعة التوليد
+</button>
+<button onclick=closeInstagramModal() class="bg-gray-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-gray-600 transition-all duration-300">
+إغلاق
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="print-area no-print" style=display:none>
+<div id=printContent></div>
+</div>
+<script>let students=[],flashcards=[],currentQuiz=[],currentQuestionIndex=0,studentScores={},cardProgress={},currentStudent=null,manualCards=[],currentScore=0,isQuizActive=!1;const GEMINI_API_KEY="AIzaSyC2AVTkw_RiCCmkyjXsRS-H8HUyhczrKpc",GEMINI_API_URL="https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent";function showNotification(e,t="info",n=4e3){const s=document.createElement("div");s.className=`notification notification-${t}`;s.innerHTML=`\n                <div class="flex items-center justify-between">\n                    <div class="flex items-center">\n                        <span class="text-xl ml-3">${{success:"✅",error:"❌",info:"ℹ️"}[t]}</span>\n                        <span>${e}</span>\n                    </div>\n                    <button onclick="this.parentElement.parentElement.remove()" class="text-white hover:text-gray-200 ml-4 text-xl font-bold">&times;</button>\n                </div>\n            `,document.body.appendChild(s),setTimeout((()=>s.remove()),n)}function switchMode(e){const t=document.getElementById("aiMode"),n=document.getElementById("manualMode"),s=document.getElementById("aiModeBtn"),a=document.getElementById("manualModeBtn");"ai"===e?(t.classList.remove("hidden"),n.classList.add("hidden"),s.className="px-6 py-3 rounded-xl font-bold transition-all duration-300 bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:from-blue-700 hover:to-purple-700",a.className="px-6 py-3 rounded-xl font-bold transition-all duration-300 bg-gray-400 text-white hover:bg-gray-500"):(n.classList.remove("hidden"),t.classList.add("hidden"),a.className="px-6 py-3 rounded-xl font-bold transition-all duration-300 bg-gradient-to-r from-green-600 to-emerald-600 text-white hover:from-green-700 hover:to-emerald-700",s.className="px-6 py-3 rounded-xl font-bold transition-all duration-300 bg-gray-400 text-white hover:bg-gray-500")}async function callGeminiAPI(e){try{const t=new AbortController,n=setTimeout((()=>t.abort()),3e4),s=await fetch(`${GEMINI_API_URL}?key=${GEMINI_API_KEY}`,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({contents:[{parts:[{text:e}]}],generationConfig:{temperature:.7,topK:40,topP:.95,maxOutputTokens:2e3}}),signal:t.signal});if(clearTimeout(n),!s.ok)throw new Error(`فشل في الاتصال مع الخدمة (${s.status})`);const a=await s.json();if(!a.candidates?.[0]?.content?.parts?.[0]?.text)throw new Error("استجابة غير صالحة من الخدمة");return a.candidates[0].content.parts[0].text}catch(e){if("AbortError"===e.name)throw new Error("انتهت مهلة الاتصال - يرجى المحاولة مرة أخرى");throw new Error(e.message||"حدث خطأ غير متوقع")}}function parseFlashcardsFromResponse(e){const t=[],n=e.split("\n").filter((e=>e.trim()));let s={};for(let e of n)e=e.trim(),e&&(e.match(/^(س\d*[\:\-]|السؤال|Question|\d+[\.\-\)])/i)||e.includes("؟")?(s.question&&s.answer&&t.push({...s}),s={question:e.replace(/^(س\d*[\:\-]|السؤال\s*\d*[\:\-]?|\d+[\.\-\)])/i,"").trim(),answer:""}):e.match(/^(ج\d*[\:\-]|الإجابة|الجواب|Answer)/i)?s.question&&(s.answer=e.replace(/^(ج\d*[\:\-]|الإجابة[\:\-]?|الجواب[\:\-]?)/i,"").trim()):s.question&&s.answer&&!e.match(/^(س\d*|السؤال)/i)&&(s.answer+=" "+e));return s.question&&s.answer&&t.push(s),t.map((e=>({question:e.question.replace(/[\"\']/g,"").trim(),answer:e.answer.replace(/[\"\']/g,"").trim()}))).filter((e=>e.question.length>5&&e.answer.length>2))}function showInstagramModal(){document.getElementById("instagramModal").classList.remove("hidden")}function closeInstagramModal(){document.getElementById("instagramModal").classList.add("hidden")}async function generateCards(){document.getElementById("topic").value.trim()?showInstagramModal():showNotification("يرجى إدخال الموضوع أولاً","error")}async function generateCardsAfterModal(){const e=document.getElementById("topic").value.trim(),t=parseInt(document.getElementById("cardCount").value),n=document.getElementById("level").value,s=document.getElementById("additionalDetails").value.trim();showGenerationStatus(!0);try{const a=`\nأنت مدرس خبير. أنشئ ${t} بطاقة تعليمية احترافية حول "${e}" للمستوى "${n}".\n\n${s?`متطلبات إضافية: ${s}`:""}\n\nالمواصفات:\n- أسئلة واضحة ومتنوعة\n- إجابات دقيقة ومختصرة (2-4 أسطر)\n- مناسبة للمستوى التعليمي\n- باللغة العربية الفصحى\n\nالتنسيق المطلوب:\nس1: [السؤال الأول؟]\nج1: [الإجابة الأولى]\n\nس2: [السؤال الثاني؟]\nج2: [الإجابة الثانية]\n\nوهكذا حتى ${t} بطاقات...\n                `,o=parseFlashcardsFromResponse(await callGeminiAPI(a));if(0===o.length)throw new Error("فشل في إنشاء البطاقات - يرجى المحاولة مرة أخرى");flashcards=o.slice(0,t),initializeCardProgress(),displayFlashcards(),showSections(),updateSelects(),showNotification(`تم إنشاء ${flashcards.length} بطاقة تعليمية بنجاح!`,"success")}catch(e){console.error("Error generating cards:",e),showNotification(`حدث خطأ في توليد البطاقات: ${e.message}`,"error")}finally{showGenerationStatus(!1)}}function addManualCard(){const e=document.getElementById("manualQuestion").value.trim(),t=document.getElementById("manualAnswer").value.trim();e&&t?(manualCards.push({question:e,answer:t}),document.getElementById("manualQuestion").value="",document.getElementById("manualAnswer").value="",updateManualCardsList(),showNotification("تم إضافة البطاقة بنجاح","success")):showNotification("يرجى إدخال السؤال والإجابة","error")}function updateManualCardsList(){const e=document.getElementById("manualCardsContainer"),t=document.getElementById("manualCardsList"),n=document.getElementById("saveManualBtn");document.getElementById("manualCardCount").textContent=manualCards.length,manualCards.length>0?(t.classList.remove("hidden"),n.classList.remove("hidden"),e.innerHTML=manualCards.map(((e,t)=>`\n                    <div class="bg-gray-50 border-2 border-gray-200 rounded-xl p-4 hover:shadow-lg transition-all duration-300">\n                        <div class="flex justify-between items-start mb-3">\n                            <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-bold">بطاقة ${t+1}</span>\n                            <button onclick="removeManualCard(${t})" \n                                    class="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-full transition-all duration-300">\n                                ❌\n                            </button>\n                        </div>\n                        <div class="grid md:grid-cols-2 gap-4">\n                            <div>\n                                <h4 class="font-bold text-blue-600 mb-2">السؤال:</h4>\n                                <p class="text-gray-700 text-sm">${e.question}</p>\n                            </div>\n                            <div>\n                                <h4 class="font-bold text-green-600 mb-2">الإجابة:</h4>\n                                <p class="text-gray-700 text-sm">${e.answer}</p>\n                            </div>\n                        </div>\n                    </div>\n                `)).join("")):(t.classList.add("hidden"),n.classList.add("hidden"))}function removeManualCard(e){manualCards.splice(e,1),updateManualCardsList(),showNotification("تم حذف البطاقة","success")}function saveManualCards(){0!==manualCards.length?(flashcards=[...manualCards],initializeCardProgress(),displayFlashcards(),showSections(),updateSelects(),showNotification(`تم حفظ ${flashcards.length} بطاقة تعليمية بنجاح!`,"success"),manualCards=[],updateManualCardsList()):showNotification("لا توجد بطاقات لحفظها","error")}function addStudent(){const e=document.getElementById("studentName"),t=e.value.trim();t?students.includes(t)?showNotification("هذا الطالب موجود بالفعل","error"):(students.push(t),studentScores[t]=0,flashcards.length>0&&initializeStudentProgress(t),e.value="",updateStudentsList(),updateSelects(),updateLeaderboard(),showNotification(`تم إضافة الطالب ${t} بنجاح`,"success")):showNotification("يرجى إدخال اسم الطالب","error")}function addBatchStudents(){const e=document.getElementById("batchStudents").value.trim();if(!e)return void showNotification("يرجى إدخال أسماء الطلاب","error");const t=e.split("\n").map((e=>e.trim())).filter((e=>e.length>0));if(0===t.length)return void showNotification("لم يتم العثور على أسماء صالحة","error");let n=0,s=0;t.forEach((e=>{students.includes(e)?s++:(students.push(e),studentScores[e]=0,flashcards.length>0&&initializeStudentProgress(e),n++)})),document.getElementById("batchStudents").value="",updateStudentsList(),updateSelects(),updateLeaderboard();let a=`تم إضافة ${n} طالب بنجاح`;s>0&&(a+=` (تم تجاهل ${s} اسم مكرر)`),showNotification(a,"success")}function generateRandomNames(){const e=["أحمد محمد","فاطمة علي","محمد سالم","نور الهدى","عبدالله أحمد","مريم حسن","يوسف إبراهيم","زينب محمود","عمر خالد","آية عبدالرحمن","حسام الدين","رقية أحمد","طارق عبدالله","سارة محمد","كريم حسن","هدى علي","ياسر محمود","ليلى إبراهيم","وليد سالم","دعاء خالد","بشار عمر","رنا حسام","فيصل طارق","منى ياسر","جمال وليد","سلمى بشار","نادر فيصل","رهف جمال","باسل نادر","لينا باسل"].sort((()=>Math.random()-.5)).slice(0,8+Math.floor(7*Math.random()));document.getElementById("batchStudents").value=e.join("\n"),showNotification(`تم توليد ${e.length} اسم عشوائي`,"success")}function clearBatchStudents(){document.getElementById("batchStudents").value="",showNotification("تم مسح الأسماء","info")}function selectRandomStudent(){if(0===students.length)return void showNotification("يرجى إضافة طلاب أولاً","error");const e=document.getElementById("randomStudentResult"),t=event.target;t.disabled=!0,t.innerHTML="🎲 جاري الاختيار...",e.innerHTML="🎯 جاري الاختيار...",e.className="flex-1 bg-yellow-100 border-2 border-yellow-300 rounded-xl p-4 text-center text-yellow-700 font-bold pulse";let n=0;const s=10+Math.floor(10*Math.random()),a=setInterval((()=>{const o=Math.floor(Math.random()*students.length),d=students[o];if(e.innerHTML=`🎯 ${d}`,n++,n>=s){clearInterval(a);const n=Math.floor(Math.random()*students.length),s=students[n];e.innerHTML=`\n                        <div class="flex items-center justify-center">\n                            <span class="text-2xl ml-3">🎉</span>\n                            <div>\n                                <div class="text-lg font-bold text-green-700">${s}</div>\n                                <div class="text-sm text-green-600">الطالب المختار</div>\n                            </div>\n                        </div>\n                    `,e.className="flex-1 bg-green-100 border-2 border-green-300 rounded-xl p-4 text-center font-medium slide-in",t.disabled=!1,t.innerHTML="🎲 اختيار عشوائي",showNotification(`تم اختيار ${s} عشوائياً!`,"success")}}),150)}function showHelpModal(){document.getElementById("helpModal").classList.remove("hidden")}function closeHelpModal(){document.getElementById("helpModal").classList.add("hidden")}function showDeveloperModal(){document.getElementById("developerModal").classList.remove("hidden")}function closeDeveloperModal(){document.getElementById("developerModal").classList.add("hidden")}function removeStudent(e){students=students.filter((t=>t!==e)),delete studentScores[e],delete cardProgress[e],currentStudent===e&&(currentStudent=null,document.getElementById("studentSelect").value="",document.getElementById("progressOverview").classList.add("hidden"),displayFlashcards()),updateStudentsList(),updateSelects(),updateLeaderboard(),showNotification(`تم حذف الطالب ${e}`,"success")}function updateStudentsList(){document.getElementById("studentsList").innerHTML=students.map((e=>`\n                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-4 flex items-center justify-between hover:shadow-lg transition-all duration-300">\n                    <div class="flex items-center">\n                        <div class="w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold ml-3">\n                            ${e.charAt(0)}\n                        </div>\n                        <div>\n                            <div class="font-bold text-gray-800">${e}</div>\n                            <div class="text-sm text-gray-600">النقاط: ${studentScores[e]||0}</div>\n                        </div>\n                    </div>\n                    <button onclick="removeStudent('${e}')" \n                            class="text-red-500 hover:text-red-700 hover:bg-red-50 p-2 rounded-full transition-all duration-300">\n                        🗑️\n                    </button>\n                </div>\n            `)).join("")}function initializeCardProgress(){students.forEach((e=>{initializeStudentProgress(e)}))}function initializeStudentProgress(e){cardProgress[e]||(cardProgress[e]={}),flashcards.forEach(((t,n)=>{cardProgress[e][n]||(cardProgress[e][n]={stage:"new",attempts:0,correctCount:0,lastReview:null,nextReview:null,difficulty:1.3,interval:1})}))}function showGenerationStatus(e){const t=document.getElementById("generationStatus"),n=document.getElementById("generateBtn");e?(t.classList.remove("hidden"),n.disabled=!0,n.classList.add("opacity-50","cursor-not-allowed"),document.getElementById("generateBtnText").innerHTML='<div class="spinner ml-2"></div> جاري التوليد...'):(t.classList.add("hidden"),n.disabled=!1,n.classList.remove("opacity-50","cursor-not-allowed"),document.getElementById("generateBtnText").innerHTML="🚀 توليد البطاقات بالذكاء الاصطناعي")}function showSections(){document.getElementById("cardsSection").classList.remove("hidden"),document.getElementById("quizSection").classList.remove("hidden")}function updateSelects(){const e=document.getElementById("studentSelect"),t=document.getElementById("quizStudentSelect"),n='<option value="">اختر الطالب</option>'+students.map((e=>`<option value="${e}">${e}</option>`)).join("");e.innerHTML=n,t.innerHTML='<option value="">جميع الطلاب</option>'+students.map((e=>`<option value="${e}">${e}</option>`)).join("")}function switchStudent(){const e=document.getElementById("studentSelect").value;currentStudent=e,e?(document.getElementById("progressOverview").classList.remove("hidden"),document.getElementById("currentStudentName").textContent=e,updateProgressOverview(e),displayFlashcardsForStudent(e)):(document.getElementById("progressOverview").classList.add("hidden"),displayFlashcards())}function displayFlashcards(){const e=document.getElementById("flashcardsContainer");document.getElementById("cardCounter").textContent=`${flashcards.length} بطاقة`,e.innerHTML=flashcards.map(((e,t)=>createFlashcardHTML(e,t,getDifficultyLevel(t,flashcards.length),!1))).join("")}function displayFlashcardsForStudent(e){const t=document.getElementById("flashcardsContainer");document.getElementById("cardCounter").textContent=`${flashcards.length} بطاقة`,cardProgress[e]||initializeStudentProgress(e),t.innerHTML=flashcards.map(((t,n)=>{const s=cardProgress[e][n];return createFlashcardHTML(t,n,getStageInfo(s.stage),!0,e,s)})).join("")}function createFlashcardHTML(e,t,n,s,a=null,o=null){const d=s?`\n                <div class="rating-section">\n                    <button onclick="rateCard(${t}, '${a}', 'hard')" \n                            class="rating-btn rating-hard">😰 صعب</button>\n                    <button onclick="rateCard(${t}, '${a}', 'good')" \n                            class="rating-btn rating-good">😊 جيد</button>\n                    <button onclick="rateCard(${t}, '${a}', 'easy')" \n                            class="rating-btn rating-easy">😄 سهل</button>\n                </div>\n            `:"",r=s?`\n                <div class="text-xs text-white bg-black bg-opacity-20 px-2 py-1 rounded-full">\n                    محاولات: ${o.attempts}\n                </div>\n            `:"";return`\n                <div class="flashcard slide-in" style="animation-delay: ${.1*t}s">\n                    <div class="flashcard-inner" onclick="flipCard(${t}, ${s?`'${a}'`:"null"})">\n                        <div class="flashcard-front ${n.gradient} text-white">\n                            <div class="flex justify-between items-start">\n                                <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-bold">\n                                    بطاقة ${t+1}\n                                </span>\n                                <div class="flex flex-col items-end gap-1">\n                                    <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-bold">\n                                        ${n.icon} ${n.stage||n.level}\n                                    </span>\n                                    ${r}\n                                </div>\n                            </div>\n                            <div class="flashcard-content">\n                                <div class="flashcard-text">${e.question}</div>\n                            </div>\n                            <div class="text-center">\n                                <div class="bg-white bg-opacity-20 px-4 py-2 rounded-full text-sm font-bold">\n                                    ✨ انقر للكشف عن الإجابة\n                                </div>\n                            </div>\n                        </div>\n                        <div class="flashcard-back stage-mastered text-white">\n                            <div class="flex justify-between items-start">\n                                <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-bold">\n                                    💡 الإجابة\n                                </span>\n                                ${s?`\n                                <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-bold">\n                                    📊 ${Math.round(o.correctCount/Math.max(o.attempts,1)*100)}%\n                                </span>\n                                `:`\n                                <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm font-bold">\n                                    ⭐ ${n.points||10} نقاط\n                                </span>\n                                `}\n                            </div>\n                            <div class="flashcard-content" style="margin-bottom: ${s?"60px":"0"};">\n                                <div class="flashcard-text">${e.answer}</div>\n                            </div>\n                            <div class="text-center">\n                                <div class="bg-white bg-opacity-20 px-4 py-2 rounded-full text-sm font-bold">\n                                    🔄 انقر للعودة للسؤال\n                                </div>\n                            </div>\n                            ${d}\n                        </div>\n                    </div>\n                </div>\n            `}function getDifficultyLevel(e,t){const n=Math.ceil(.4*t),s=Math.ceil(.4*t);return e<n?{level:"سهل",gradient:"stage-mastered",icon:"🟢",points:5}:e<n+s?{level:"متوسط",gradient:"stage-learning",icon:"🟡",points:10}:{level:"صعب",gradient:"stage-new",icon:"🔴",points:15}}function getStageInfo(e){switch(e){case"new":return{stage:"جديدة",gradient:"stage-new",icon:"🆕"};case"learning":return{stage:"تعلم",gradient:"stage-learning",icon:"📚"};case"review":return{stage:"مراجعة",gradient:"stage-review",icon:"🔄"};case"mastered":return{stage:"متقنة",gradient:"stage-mastered",icon:"✅"};default:return{stage:"غير محدد",gradient:"stage-new",icon:"❓"}}}function flipCard(e,t){const n=document.querySelectorAll(".flashcard");n[e]&&(n[e].classList.toggle("flipped"),t&&n[e].classList.contains("flipped")&&cardProgress[t]&&cardProgress[t][e]&&(cardProgress[t][e].lastReview||(cardProgress[t][e].attempts++,updateProgressOverview(t))))}function rateCard(e,t,n){event.stopPropagation();const s=cardProgress[t][e],a=new Date;s.attempts++,s.lastReview=a;let o=s.interval,d=s.stage;switch(n){case"hard":d="learning",o=1,s.difficulty=Math.max(1.3,s.difficulty+.2);break;case"good":"new"===s.stage?(d="learning",o=1):"learning"===s.stage?(s.correctCount++,s.correctCount>=2?(d="review",o=3):o=1):"review"===s.stage&&(o=Math.ceil(s.interval*s.difficulty),o>=21&&(d="mastered"));break;case"easy":"new"===s.stage||"learning"===s.stage?(d="review",o=4):"review"===s.stage&&(o=Math.ceil(s.interval*s.difficulty*1.3),o>=14&&(d="mastered")),s.difficulty=Math.max(1.3,s.difficulty-.15),s.correctCount++}s.stage=d,s.interval=o,s.nextReview=new Date(a.getTime()+24*o*60*60*1e3);const r=calculatePoints(n,d);studentScores[t]+=r,showCardFeedback(n,d,r,o),setTimeout((()=>{displayFlashcardsForStudent(t),updateProgressOverview(t),updateLeaderboard()}),1500)}function calculatePoints(e,t){return Math.ceil({hard:1,good:3,easy:5}[e]*{new:1,learning:1.5,review:2,mastered:3}[t])}function showCardFeedback(e,t,n,s){const a=document.createElement("div");a.className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white border-4 border-blue-300 rounded-2xl p-8 shadow-2xl z-50 text-center slide-in";const o={hard:{emoji:"😓",color:"text-red-600",text:"صعب"},good:{emoji:"😊",color:"text-yellow-600",text:"جيد"},easy:{emoji:"😄",color:"text-green-600",text:"سهل"}},d=getStageInfo(t);a.innerHTML=`\n                <div class="text-6xl mb-4">${o[e].emoji}</div>\n                <h3 class="text-2xl font-bold ${o[e].color} mb-2">${o[e].text}</h3>\n                <p class="text-lg text-gray-700 mb-4">\n                    المرحلة الجديدة: <span class="font-bold">${d.stage}</span> ${d.icon}\n                </p>\n                <p class="text-lg text-blue-600 font-bold mb-4">+${n} نقطة</p>\n                <p class="text-sm text-gray-600">\n                    المراجعة التالية خلال ${s} ${1===s?"يوم":"أيام"}\n                </p>\n            `,document.body.appendChild(a),setTimeout((()=>a.remove()),1500)}function updateProgressOverview(e){if(!cardProgress[e])return;const t=cardProgress[e];let n=0,s=0,a=0,o=0;Object.values(t).forEach((e=>{switch(e.stage){case"new":n++;break;case"learning":s++;break;case"review":a++;break;case"mastered":o++}})),document.getElementById("newCards").textContent=n,document.getElementById("learningCards").textContent=s,document.getElementById("reviewCards").textContent=a,document.getElementById("masteredCards").textContent=o}function startQuiz(){if(0===flashcards.length)return void showNotification("يرجى توليد البطاقات أولاً","error");if(0===students.length)return void showNotification("يرجى إضافة طلاب أولاً","error");const e=document.getElementById("quizType").value,t=document.getElementById("quizStudentSelect").value;currentQuiz=prepareQuizQuestions(e,t),currentQuestionIndex=0,currentScore=0,isQuizActive=!0,document.getElementById("quizControls").classList.add("hidden"),document.getElementById("quizGame").classList.remove("hidden"),showQuestion()}function prepareQuizQuestions(e,t){let n=[...flashcards];return"mixed"!==e&&t&&cardProgress[t]&&(n=flashcards.filter(((n,s)=>cardProgress[t][s].stage===e))),n.sort((()=>Math.random()-.5)).slice(0,Math.min(10,n.length))}function showQuestion(){if(currentQuestionIndex>=currentQuiz.length)return void endQuiz();const e=currentQuiz[currentQuestionIndex],t=(currentQuestionIndex+1)/currentQuiz.length*100;document.getElementById("currentQuestionNum").textContent=currentQuestionIndex+1,document.getElementById("totalQuestions").textContent=currentQuiz.length,document.getElementById("currentScore").textContent=currentScore,document.getElementById("progressBar").style.width=t+"%",document.getElementById("questionText").textContent=e.question;const n=generateOptions(e);document.getElementById("answerOptions").innerHTML=n.map(((t,n)=>`\n                <button onclick="selectAnswer('${t}', '${e.answer}', ${n})" \n                        class="answer-option bg-white border-2 border-gray-200 rounded-xl p-4 text-lg font-bold hover:border-blue-500 hover:bg-blue-50 transition-all duration-300 transform hover:scale-105">\n                    ${t}\n                </button>\n            `)).join(""),document.getElementById("questionFeedback").classList.add("hidden")}function generateOptions(e){const t=[e.answer],n=flashcards.filter((t=>t.answer!==e.answer));for(;t.length<4&&n.length>0;){const e=Math.floor(Math.random()*n.length),s=n[e].answer;t.includes(s)||t.push(s),n.splice(e,1)}return t.sort((()=>Math.random()-.5))}function selectAnswer(e,t,n){const s=e===t,a=document.querySelectorAll(".answer-option");if(a.forEach((e=>e.disabled=!0)),a.forEach(((e,a)=>{e.textContent.trim()===t?(e.classList.add("bg-green-500","text-white","border-green-500"),e.innerHTML=`✅ ${e.textContent}`):a!==n||s||(e.classList.add("bg-red-500","text-white","border-red-500"),e.innerHTML=`❌ ${e.textContent}`)})),s){currentScore+=10;const e=document.getElementById("quizStudentSelect").value;e?studentScores[e]+=10:students.forEach((e=>{studentScores[e]+=5}))}showQuizFeedback(s,t),currentQuestionIndex++,setTimeout((()=>{showQuestion()}),2500)}function showQuizFeedback(e,t){const n=document.getElementById("questionFeedback");n.classList.remove("hidden"),n.innerHTML=e?'\n                    <div class="bg-green-100 border-2 border-green-300 rounded-xl p-6 text-center">\n                        <div class="text-4xl mb-2">🎉</div>\n                        <h3 class="text-xl font-bold text-green-800 mb-2">إجابة صحيحة!</h3>\n                        <p class="text-green-700">حصلت على 10 نقاط</p>\n                    </div>\n                ':`\n                    <div class="bg-red-100 border-2 border-red-300 rounded-xl p-6 text-center">\n                        <div class="text-4xl mb-2">😔</div>\n                        <h3 class="text-xl font-bold text-red-800 mb-2">إجابة خاطئة</h3>\n                        <p class="text-red-700">الإجابة الصحيحة: <strong>${t}</strong></p>\n                    </div>\n                `}function endQuiz(){isQuizActive=!1,document.getElementById("questionText").innerHTML=`\n                <div class="text-center">\n                    <div class="text-6xl mb-4">🏆</div>\n                    <h3 class="text-3xl font-bold text-purple-600 mb-4">انتهى الاختبار!</h3>\n                    <div class="text-2xl font-bold text-blue-600 mb-6">\n                        النقاط النهائية: ${currentScore}\n                    </div>\n                </div>\n            `,document.getElementById("answerOptions").innerHTML='\n                <button onclick="resetQuiz()" \n                        class="col-span-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white py-4 px-8 rounded-xl font-bold text-lg hover:from-purple-700 hover:to-pink-700 transition-all duration-300 transform hover:scale-105">\n                    🎮 اختبار جديد\n                </button>\n            ',document.getElementById("questionFeedback").classList.add("hidden"),updateLeaderboard()}function resetQuiz(){document.getElementById("quizControls").classList.remove("hidden"),document.getElementById("quizGame").classList.add("hidden"),currentQuestionIndex=0,currentScore=0,isQuizActive=!1}function updateLeaderboard(){const e=document.getElementById("leaderboardContent");if(0===students.length)return void(e.innerHTML='\n                    <div class="text-center py-12 text-gray-500">\n                        <div class="text-6xl mb-4">📊</div>\n                        <p class="text-xl font-medium">أضف طلاباً وابدأ الاختبار لرؤية النتائج</p>\n                    </div>\n                ');const t=students.sort(((e,t)=>studentScores[t]-studentScores[e]));e.innerHTML=`\n                <div class="grid gap-4">\n                    ${t.map(((e,t)=>`\n                            <div class="bg-gradient-to-r ${0===t?"from-yellow-400 to-orange-500":1===t?"from-gray-300 to-gray-400":2===t?"from-orange-400 to-red-500":"from-blue-400 to-purple-500"} text-white rounded-xl p-6 flex items-center justify-between transform hover:scale-105 transition-all duration-300 slide-in" style="animation-delay: ${.1*t}s">\n                                <div class="flex items-center">\n                                    <div class="text-4xl ml-4">${0===t?"🥇":1===t?"🥈":2===t?"🥉":"🏅"}</div>\n                                    <div>\n                                        <div class="text-xl font-bold">${e}</div>\n                                        <div class="text-sm opacity-90">المركز ${t+1}</div>\n                                    </div>\n                                </div>\n                                <div class="text-3xl font-bold">${studentScores[e]}</div>\n                            </div>\n                        `)).join("")}\n                </div>\n            `}function showPrintModal(){if(0===flashcards.length)return void showNotification("لا توجد بطاقات للطباعة","error");const e=document.getElementById("printModal");document.getElementById("printPreviewContent").innerHTML=`\n                <div class="text-center mb-8">\n                    <h1 class="text-3xl font-bold text-gray-800 mb-2">البطاقات التعليمية</h1>\n                    <p class="text-gray-600">الموضوع: ${document.getElementById("topic").value||"غير محدد"}</p>\n                    <p class="text-gray-600">عدد البطاقات: ${flashcards.length}</p>\n                    <p class="text-gray-600">تاريخ الطباعة: ${(new Date).toLocaleDateString("ar-SA")}</p>\n                </div>\n                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">\n                    ${flashcards.map(((e,t)=>`\n                        <div class="border-2 border-gray-300 rounded-lg p-4 bg-gray-50">\n                            <div class="text-blue-600 font-bold mb-3">\n                                <span class="bg-blue-100 px-2 py-1 rounded text-sm ml-2">${t+1}</span>\n                                ${e.question}\n                            </div>\n                            <div class="text-green-700">\n                                <strong>الإجابة:</strong> ${e.answer}\n                            </div>\n                        </div>\n                    `)).join("")}\n                </div>\n            `,e.classList.remove("hidden")}function closePrintModal(){document.getElementById("printModal").classList.add("hidden")}function printCards(){document.getElementById("printContent").innerHTML=`\n                <div style="padding: 20px; font-family: 'Cairo', sans-serif;">\n                    <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 20px;">\n                        <h1 style="font-size: 28px; font-weight: bold; color: #333; margin-bottom: 10px;">البطاقات التعليمية</h1>\n                        <p style="color: #666; margin: 5px 0;">الموضوع: ${document.getElementById("topic").value||"غير محدد"}</p>\n                        <p style="color: #666; margin: 5px 0;">عدد البطاقات: ${flashcards.length}</p>\n                        <p style="color: #666; margin: 5px 0;">تاريخ الطباعة: ${(new Date).toLocaleDateString("ar-SA")}</p>\n                    </div>\n                    ${flashcards.map(((e,t)=>`\n                        <div style="margin-bottom: 25px; border: 2px solid #333; border-radius: 10px; padding: 20px; background: #f9f9f9; page-break-inside: avoid;">\n                            <div style="font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #2563eb;">\n                                <span style="background: #dbeafe; padding: 5px 10px; border-radius: 5px; font-size: 14px; margin-left: 10px;">${t+1}</span>\n                                ${e.question}\n                            </div>\n                            <div style="font-size: 16px; color: #059669; border-top: 1px solid #ccc; padding-top: 15px;">\n                                <strong>الإجابة:</strong> ${e.answer}\n                            </div>\n                        </div>\n                    `)).join("")}\n                </div>\n            `;const e=document.querySelector(".print-area");e.style.display="block",setTimeout((()=>{window.print(),e.style.display="none",closePrintModal()}),100)}document.getElementById("studentName").addEventListener("keypress",(function(e){"Enter"===e.key&&addStudent()})),document.getElementById("topic").addEventListener("keypress",(function(e){"Enter"===e.key&&generateCards()})),document.getElementById("manualQuestion").addEventListener("keypress",(function(e){"Enter"===e.key&&e.ctrlKey&&addManualCard()})),document.getElementById("manualAnswer").addEventListener("keypress",(function(e){"Enter"===e.key&&e.ctrlKey&&addManualCard()})),document.getElementById("printModal").addEventListener("click",(function(e){e.target===this&&closePrintModal()})),document.getElementById("helpModal").addEventListener("click",(function(e){e.target===this&&closeHelpModal()})),document.getElementById("developerModal").addEventListener("click",(function(e){e.target===this&&closeDeveloperModal()})),document.getElementById("instagramModal").addEventListener("click",(function(e){e.target===this&&closeInstagramModal()})),window.onload=function(){console.log("نظام البطاقات التعليمية المتقدم جاهز"),document.getElementById("topic").value="الفيزياء الحديثة";["أحمد محمد","فاطمة علي","محمد سالم"].forEach((e=>{students.push(e),studentScores[e]=0})),updateStudentsList(),updateSelects(),updateLeaderboard(),showNotification("مرحباً بك في نظام البطاقات التعليمية المتقدم!","success")}</script>
+<script>!function(){function e(){var e=t.contentDocument||t.contentWindow.document;if(e){var n=e.createElement("script");n.innerHTML="window.__CF$cv$params={r:'96d7fddc103a60bf',t:'MTc1NDkxODAyMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);",e.getElementsByTagName("head")[0].appendChild(n)}}if(document.body){var t=document.createElement("iframe");if(t.height=1,t.width=1,t.style.position="absolute",t.style.top=0,t.style.left=0,t.style.border="none",t.style.visibility="hidden",document.body.appendChild(t),"loading"!==document.readyState)e();else if(window.addEventListener)document.addEventListener("DOMContentLoaded",e);else{var n=document.onreadystatechange||function(){};document.onreadystatechange=function(t){n(t),"loading"!==document.readyState&&(document.onreadystatechange=n,e())}}}}()</script></body>
 </html>
